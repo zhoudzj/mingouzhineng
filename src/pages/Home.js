@@ -33,13 +33,13 @@ const Home = () => {
 
     useEffect(() => {
         return () => {
-
+            console.log(match);
         };
     },[]);
 
     return (
         <Switch>
-            <Route path={`${match.path}:houseId`}>
+            <Route path={`${match.path}/:houseId`}>
                 <SelectItem />
             </Route>
             <Route path={match.path}>

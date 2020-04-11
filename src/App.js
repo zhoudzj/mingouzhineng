@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import styles from './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import { Switch, Route, Link,useHistory } from 'react-router-dom'
+import { Switch, Route, Redirect,Link,useHistory } from 'react-router-dom'
 
 function App() {
   const [token,setToken] = useState('aa')
@@ -14,16 +14,17 @@ function App() {
     },[]);
 
   return (
-      //  <Switch> 
-      //    {/* <Route path={"/login"}>
-      //      <Login />
-      //    </Route> */}
-          <Route path={"/"}>
+       <Switch>
+          <Route path={"/login"}>
+           <Login />
+         </Route>
+          <Route path={"/house"}>
           <div className={styles.App}>
             <Home />
-          </div> 
+          </div>
           </Route>
-      //  </Switch>
+          <Redirect from='/' to={'/house'}/>
+       </Switch>
   );
 }
 
