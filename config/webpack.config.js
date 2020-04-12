@@ -384,6 +384,7 @@ module.exports = function(webpackEnv) {
                       },
                     },
                   ],
+                  [ "import",{libraryName: "antd", style: 'css'}]
                 ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -430,7 +431,7 @@ module.exports = function(webpackEnv) {
             // By default we support CSS Modules with the extension .module.css
             {
               test: cssRegex,
-              exclude: cssModuleRegex,
+              exclude: /node_modules|antd\.css/,
               use: getStyleLoaders({
                 importLoaders: 1,
                 modules: true,
@@ -442,18 +443,25 @@ module.exports = function(webpackEnv) {
               // See https://github.com/webpack/webpack/issues/6571
               sideEffects: true,
             },
+            {
+              test: cssRegex,
+              include:/node_modules|antd\.css/,
+              use: getStyleLoaders({
+                importLoaders: 1
+              })
+            },
             // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
             // using the extension .module.css
-            { 
-              test: cssModuleRegex,
-              use: getStyleLoaders({
-                importLoaders: 1,
-                sourceMap: isEnvProduction && shouldUseSourceMap,
-                modules: {
-                  getLocalIdent: getCSSModuleLocalIdent,
-                },
-              }),
-            },
+            // { 
+            //   test: cssModuleRegex,
+            //   use: getStyleLoaders({
+            //     importLoaders: 1,
+            //     sourceMap: isEnvProduction && shouldUseSourceMap,
+            //     modules: {
+            //       getLocalIdent: getCSSModuleLocalIdent,
+            //     },
+            //   }),
+            // },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the
             // extensions .module.scss or .module.sass

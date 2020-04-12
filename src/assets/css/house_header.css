@@ -1,0 +1,21 @@
+.g_header {
+  height: 80px;
+  line-height: 80px;
+  font-size:20px;
+  background-color:white;
+  border-bottom:solid 1px gray;
+}
+.g_arrow {
+  float: left;
+  margin-left:20px
+}
+.arrowLeft:after {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-bottom: 2px solid #656565;
+    border-left: 2px solid #656565;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}

@@ -4,10 +4,11 @@ import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom
 import Order from './Order'
 import Shop from './Shop'
 import styles from "../assets/css/selectItem.css"
-
+import HouseHeader from "../components/HouseHeader"
 const SelectItem = ({}) => {
 
     const match = useRouteMatch();
+    const history = useHistory();
 
     let { houseId } = useParams();
     const [name,setName] = useState('');
@@ -19,6 +20,7 @@ const SelectItem = ({}) => {
             setName('留香园')
         }
     },[])
+    
     return (
         <Switch>
             <Route path={`${match.path}/order`}>
@@ -29,7 +31,7 @@ const SelectItem = ({}) => {
             </Route>
             <Route path={`${match.path}`}>
             <div>
-                <header className={styles.g_header}>{name}</header>
+                <HouseHeader title={'案场主页'}/>
                 <div className={styles.g_title}>{titile}</div>
                 <div className={styles.g_items}>
                 <Link to={`${match.url}/order`}>

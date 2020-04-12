@@ -1,0 +1,18 @@
+.g_combos {
+  display: flex;
+}
+
+.combo_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  margin:0 20px;
+}
+
+.img_wrap {
+  border-radius: 3px;
+  width:100%;
+  height:100px;
+}
