@@ -10,7 +10,6 @@ const {TabPane} = Tabs;
 
 const Order = () => {
   const match = useRouteMatch();
-  console.log(match);
   const [mode,
     setMode] = useState('left');
   const [roomArray] = useState(['三室两厅', '两室一厅', '三室一厅']);
