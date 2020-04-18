@@ -22,7 +22,8 @@ const padData = [
     type: '标准智能面板',
     typeId: 1,
     key: 1,
-    text: `背光效果：文字背景灯黄色 ，工作灯白色
+    text: `标准智能面板
+      背光效果：文字背景灯黄色 ，工作灯白色
       颜色：可按客户需求定制
       功能：灯光、场景、空调、窗帘、紧急求助等`,
     image: img_stadard,
@@ -32,7 +33,8 @@ const padData = [
     type: '标准三合一温控面板',
     typeId: 1,
     key: 2,
-    text: `一台设备可同时控制中央空调、地暖、新风系统
+    text: `标准三合一温控面板
+      一台设备可同时控制中央空调、地暖、新风系统
       自带1路16A继电器控制地暖
       4路继电器控制空调水机`,
     image: img_stadard_three,
@@ -42,8 +44,10 @@ const padData = [
     type: '金属亚光智能面板',
     typeId: 2,
     key: 3,
-    text: `材质：铝合金颜色 ：灰色拉丝，可按客户要求定制
-功能 ：灯光、场景、空调、窗帘、紧急求助等`,
+    text: `金属亚光智能面板
+    材质：铝合金
+    颜色 ：灰色拉丝，可按客户要求定制
+    功能 ：灯光、场景、空调、窗帘、紧急求助等`,
     image: img_iron,
     price: 880,
     color: "灰色拉丝"
@@ -51,10 +55,10 @@ const padData = [
     type: '三合一旋钮温控智能面板',
     typeId: 2,
     key: 4,
-    text: `材质：铝合金
-颜色 ：灰色拉丝，可按客户要求定制
-功能 ：空调
-控制`,
+    text: `三合一旋钮温控智能面板
+          材质：铝合金
+          颜色 ：灰色拉丝，可按客户要求定制
+          功能 ：空调控制`,
     image: img_iron_three,
     price: 1680,
     color: "灰色拉丝"
@@ -62,8 +66,11 @@ const padData = [
     type: '炫彩智能面板',
     typeId: 3,
     key: 5,
-    text: `背光显示（0/25%/50%/100%四档可调）
-支持单击/双击/三击控制呼吸灯设计，人体感应情景模式联动，按键触点振动`,
+    text: `炫彩智能面板
+            背光显示（0/25%/50%/100%四档可调）
+            支持单击/双击/三击控制呼吸灯设计，
+            人体感应情景模式联动，
+            按键触点振动`,
     image: img_shine,
     price: 1080,
     color: "阿姆斯特丹橙"
@@ -71,9 +78,10 @@ const padData = [
     type: '三和一温控智能面板',
     typeId: 3,
     key: 6,
-    text: `一台设备可同时控制中央空调、地暖、新风系统
-自带1路16A继电器控制地暖
-4路继电器控制空调水机`,
+    text: `三和一温控智能面板
+      一台设备可同时控制中央空调、地暖、新风系统
+      自带1路16A继电器控制地暖
+      4路继电器控制空调水机`,
     image: img_shine_tree,
     price: 1280,
     color: "阿姆斯特丹橙"
@@ -84,18 +92,19 @@ const wifiData = [
     type: 'G500SE',
     typeId: 1,
     key: 1,
-    text: `该设备基于金融级硬件，集合路由、交换、无线控制（AC）和PoE供电等四大功能为一体
-300终端并发入网
-5台无线AP管理
-1个GE WAN口
-4个GE LAN口，其中4口支持PoE(IEEE802.3af）`,
+    text: `G500SE
+    该设备基于金融级硬件，集合路由、交换、无线控制（AC）和PoE供电等四大功能为一体
+    300终端并发入网
+    5台无线AP管理
+    1个GE WAN口
+    4个GE LAN口，其中4口支持PoE(IEEE802.3af）`,
     image: img_G500SE,
     price: 1880
   }, {
     type: 'AP1000',
     typeId: 2,
     key: 2,
-    text: `AP1000:
+    text: `AP1000
       全千兆网口
       2.4G/5G双频1200M带宽
       IEEE802.3af 标准PoE供电`,
@@ -105,7 +114,8 @@ const wifiData = [
     type: 'BeeconSE',
     typeId: 3,
     key: 3,
-    text: `集合路由、交换等功能为一体
+    text: `BeeconSE
+    集合路由、交换等功能为一体
     1个FE WAN口
     1个FE LAN口，LAN3口支持PoE受电
     支持5V1A国标电源和PoE受电两种方式`,
@@ -115,7 +125,8 @@ const wifiData = [
     type: 'BeeconIPTV',
     typeId: 4,
     key: 4,
-    text: `支持802.11b/g/n,2.4G 300M带宽
+    text: `BeeconIPTV
+      支持802.11b/g/n,2.4G 300M带宽
       10/100Mbps Rj45口
       IEEE802.3af 标准PoE供电`,
     image: img_BeeconSE,
@@ -141,7 +152,7 @@ const DeviceDetail = () => {
   }, [])
 
   const [selectionType,
-    setSelectionType] = useState('checkbox');
+    setSelectionType] = useState('radio');
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {

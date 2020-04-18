@@ -5,4 +5,5 @@
 
 .text_wrap {
   width:400px;
+  white-space:pre-line
 }
