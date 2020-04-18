@@ -1,6 +1,5 @@
 import React,{ useState, useEffect, useReducer }  from 'react';
-import { useParams } from 'react-router-dom';
-import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch, useHistory,useParams } from 'react-router-dom'
 import Order from './Order'
 import Shop from './Shop'
 import styles from "../assets/css/selectItem.css"
