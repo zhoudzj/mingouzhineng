@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch} from 'react-router-dom'
-import {Table, Form, Button} from 'antd';
+import {Table, Button,Typography} from 'antd';
 import HouseHeader from "../components/HouseHeader";
 import styles from "../assets/css/order_detail.css";
 import DeviceDetail from "./DeviceDetail";
+const { Text } = Typography;
 
 const img_int = require('../assets/img/product/shining_int_pad.png');
 const img_three = require('../assets/img/product/shining_tree_pad.png');
@@ -22,7 +23,8 @@ const rawData = [
       支持单击/双击/三击控制呼吸灯设计，人体感应情景模式联动 
       按键触点振动`,
     image: img_int,
-    price: 1000
+    price: 1000,
+    number: 5
   }, {
     type: "智能面板",
     typeId: 1,
@@ -33,7 +35,8 @@ const rawData = [
       自带1路16A继电器控制地暖
       4路继电器控制空调水机`,
     image: img_three,
-    price: 1200
+    price: 1200,
+    number: 3
   }, {
     type: '电动窗帘',
     typeId: 2,
@@ -49,7 +52,8 @@ const rawData = [
       安装方式：明轨
       滑动装：一般滑轮`,
     image: img_chuanglian,
-    price: 600
+    price: 600,
+    number: 6
   }, {
     type: 'wifi覆盖',
     typeId: 3,
@@ -62,7 +66,8 @@ const rawData = [
       1个GE WAN口
       4个GE LAN口，其中4口支持PoE(IEEE802.3af）`,
     image: img_s500se,
-    price: 1888
+    price: 1888,
+    number: 1
   }, {
     type: 'wifi覆盖',
     typeId: 3,
@@ -73,7 +78,8 @@ const rawData = [
       2.4G/5G双频1200M带宽
       IEEE802.3af 标准PoE供电`,
     image: img_ap1000,
-    price: 680
+    price: 680,
+    number: 4
   }
 ];
 const OrderDetail = () => {
@@ -83,6 +89,7 @@ const OrderDetail = () => {
 
   const plus = (e, row) => {
     row.number += 1;
+    row.totalPrice = row.price * row.number;
     const newData = [...tableData];
     setTableData(newData);
   }
@@ -90,6 +97,7 @@ const OrderDetail = () => {
     if (row.number === 0) 
       return;
     row.number -= 1;
+    row.totalPrice = row.price * row.number;
     const newData = [...tableData];
     setTableData(newData)
   }
@@ -162,17 +170,17 @@ const OrderDetail = () => {
             style={{
             marginLeft: '20px',
             color: 'red'
-          }}>{`￥${row.price}`}</span>
+          }}>{`￥${row.totalPrice}`}</span>
         </div>
       )
     }
   ];
-  const junmpToDetail = (number) => {}
+
   useEffect(() => {
     const newData = rawData.map(item => {
       return {
         ...item,
-        number: 0
+        totalPrice: item.price * item.number
       }
     })
     setTableData(newData);
@@ -185,7 +193,23 @@ const OrderDetail = () => {
       </Route>
       <Route path={`${match.path}`}>
         <HouseHeader title={"选择推荐"}/>
-        <Table columns={columns} dataSource={tableData} bordered></Table>
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          bordered
+          summary={(pageData) => {
+          let totalCount = 0;
+          pageData.forEach(({totalPrice}) => {
+            totalCount += totalPrice;
+          });
+          return ( <> <tr>
+            <th></th>
+            <td></td>
+            <td></td>
+            <td>
+              总价:<Text type="danger">￥{totalCount}</Text>
+            </td>
+          </tr> < /> ) }}/>
       </Route>
     </Switch>
   )

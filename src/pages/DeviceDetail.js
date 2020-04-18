@@ -168,9 +168,9 @@ const DeviceDetail = () => {
       render: (text, row, index) => (
         <div>
           <div>
-            {index%2===0? <div><span>颜色:</span><span>{row.color}</span></div> :''}
+            {(index%2===0&&deviceId.split(':')[1] === '1')?<div><span>颜色:</span><span>{row.color}</span></div> :''}
           </div>
-          <a>{text}</a>
+          <span>单价:</span><a>{text}</a>
         </div>
       )
     }
