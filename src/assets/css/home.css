@@ -1,3 +1,7 @@
 .g_house_wrap {
     display: flex;
+    flex-direction: row;
+    flex-wrap:  wrap;
+    justify-content: center;
+    align-items: flex-start;
   }
