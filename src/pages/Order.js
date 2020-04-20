@@ -28,9 +28,7 @@ const Order = () => {
           <Tabs
             defaultActiveKey="1"
             tabPosition={mode}
-            style={{
-            height: 220
-          }}>
+            >
             {roomArray.map(i => (
               <TabPane tab={i} key={i}>
                 <Combo key={i}/>

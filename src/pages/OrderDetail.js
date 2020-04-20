@@ -107,6 +107,9 @@ const OrderDetail = () => {
       title: '设备名称',
       dataIndex: 'type',
       key: 'type',
+      width:'100px',
+      // textWrap: 'word-break',
+      ellipsis: true,
       render: (value, row, index) => {
         const obj = {
           children: value,
@@ -127,6 +130,8 @@ const OrderDetail = () => {
       title: '图片',
       dataIndex: 'image',
       key: 'image',
+      width:'150px',
+      ellipsis: true,
       render: (value) => {
         return <img className={styles.g_img} src={value}/>
       }
@@ -134,13 +139,16 @@ const OrderDetail = () => {
       title: '描述',
       dataIndex: 'text',
       key: 'text',
+      width:'350px',
+      ellipsis: true,
       render: (value) => {
         return <span className={styles.g_text}>{value}</span>
       }
     }, {
       title: '数量',
       dataIndex: 'number',
-      key: 'number',
+      width:'250px',
+      ellipsis: true,
       render: (value, row, index) => (
         <div>
           {(row.typeId === 1 || row.typeId === 3) && (row.no === 1)
@@ -203,14 +211,14 @@ const OrderDetail = () => {
           pageData.forEach(({totalPrice}) => {
             totalCount += totalPrice;
           });
-          return ( <> <tr>
+          return (<><tr>
             <th></th>
             <td></td>
             <td></td>
             <td>
               总价:<Text type="danger">￥{totalCount}</Text>
             </td>
-          </tr> < /> ) }}/>
+          </tr></>)}}/>
       </Route>
     </Switch>
   )

@@ -168,14 +168,20 @@ const DeviceDetail = () => {
     {
       title: '图片',
       dataIndex: 'image',
+      width:'150px',
+      ellipsis: true,
       render: value => <img className={styles.img_wrap} src={value}/>
     }, {
-      title: '文本',
+      title: '介绍',
       dataIndex: 'text',
+      width:'400px',
+      ellipsis: true,
       render: text => <div className={styles.text_wrap}>{text}</div>
     }, {
       title: '单价',
       dataIndex: 'price',
+      width:'200px',
+      ellipsis: true,
       render: (text, row, index) => (
         <div>
           <div>
