@@ -5,7 +5,7 @@ import Login from './pages/Login';
 import { Switch, Route, Redirect,Link,useHistory } from 'react-router-dom'
 
 function App() {
-  const [token,setToken] = useState('aa')
+  const [token,setToken] = useState('')
   const history = useHistory();
   useEffect(() => {
         if(!token){

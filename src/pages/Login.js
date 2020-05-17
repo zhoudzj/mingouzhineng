@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Link, useHistory } from 'react-router-dom'
-import styles from "../assets/css/login.css"
+import styles from "../assets/scss/login.scss"
 
 const Login = () => {
     const history = useHistory();
@@ -8,13 +8,14 @@ const Login = () => {
         history.push('/')
     }
     return (
-        <div className={styles.g_login}>
-            <header className={styles.g_header}>请登录</header>
-            <div className={styles.content_wrap}>
-                <div><span>用户名</span><input/></div>
-                <div><span>密码</span><input/></div>
-                <button onClick={haddleLogin}>登录</button>
-            </div>
+        <div className={styles.Login}>
+            <header className={styles.Login_header}>一站式智能场景选装</header>
+            {/*<div className={styles.content_wrap}>
+                <div className={styles.input_wrap}><span>用户名</span><input/></div>
+                <div className={styles.input_wrap}><span>密码</span><input/></div>
+                <button className={styles.button_login} onClick={haddleLogin}>登录</button>
+                <div>powered by Mingou</div>
+            </div>*/}
         </div>
     )
 }

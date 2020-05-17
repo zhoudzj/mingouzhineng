@@ -5,10 +5,10 @@ import House from '../components/House'
 import SelectItem from './SelectItem'
 import styles from "../assets/css/home.css"
 
-const HouseInfos = [{ url: require('../assets/img/lanseqianjiang.png'), title: '蓝色钱江' }, { url: require('../assets/img/liuyuan.png'), title: '留香园' }, { url: require('../assets/img/zhineng.svg'), title: '智能小镇' }]
+const HouseInfos = [{ url: require('../assets/img/lanseqianjiang.png'), title: '春月锦庐' }]
 
 const initialState = {
-  headerTitle: '选择案场',
+  headerTitle: '选择项目',
   testObj:null
 }
 

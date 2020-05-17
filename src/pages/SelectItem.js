@@ -11,7 +11,7 @@ const SelectItem = ({}) => {
 
     let { houseId } = useParams();
     const [name,setName] = useState('');
-    const [titile,setTitle] = useState('名欧智能中心')
+    const [titile,setTitle] = useState('名欧智能优选')
     useEffect(()=>{
         if(houseId.split(':')[1]==='100'){
             setName('蓝色钱江')
@@ -30,7 +30,7 @@ const SelectItem = ({}) => {
             </Route>
             <Route path={`${match.path}`}>
             <div>
-                <HouseHeader title={'案场主页'}/>
+                <HouseHeader title={''}/>
                 <div className={styles.g_title}>{titile}</div>
                 <div className={styles.g_items}>
                 <Link to={`${match.url}/order`}>

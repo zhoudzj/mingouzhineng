@@ -1,0 +1,13 @@
+.hoc {
+  font-size: 16px;
+  margin-right: 20px
+}
+
+.user:hover {
+  color: orangered
+}
+
+.logout:hover {
+  color: orangered
+}
+

@@ -10,3 +10,7 @@
     background-color:white;
     border-bottom:solid 1px gray;
   }
+
+  .app_title {
+    flex:1
+  }
