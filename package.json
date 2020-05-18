@@ -66,7 +66,8 @@
   },
   "devDependencies": {
     "http-proxy-middleware": "^1.0.3",
-    "imagemin-webpack-plugin": "2.4.2"
+    "imagemin-webpack-plugin": "2.4.2",
+    "node-sass": "4.14.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

@@ -2,7 +2,10 @@
 
 .Login {
     height: 100vh;
-    background: url(../img/bg_login.jpg);
+    background-image: url(../img/bg_login.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
   &_header {
     font-size: 30px;
     font-weight: bold;
@@ -11,37 +14,108 @@
     height: 100px;
   }
   .content_wrap {
-    width:600px;
-    height: 500px;
     margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 50px;
+    position: relative;
+    @media screen and (min-width:1025px){
+      width: 600px;
+      height: 400px;
+      padding: 50px 0 0;
+    }
+    @media screen and (min-width:640px) and (max-width: 1024px){
+      width: 600px;
+      height: 550px;
+      padding: 50px 0 0;
+    }
+    @media screen and (max-width: 639px){
+      height: 60vh;
+      margin: 50px 15vw 0;
+    }
+    .intro {
+      left:50%;
+      transform: translatex(-50%);
+      height: 30px;
+      position: absolute;
+      bottom:0;
+      @media screen and (min-width:1025px){
+        font-size: 20px;
+      }
+    }
   }
   .button_login {
-    width: 100%;
-    height: 60px;
     border-radius: 30px;
-    margin-top:50px;
-    background: $bgcolor
+    background: $bgcolor;
+    @media screen and (min-width:1025px){
+      width: 500px;
+      height: 50px;
+      margin-left:-250px;
+      left:50%;
+      position: absolute;
+      bottom: 30px;
+    }
+    @media screen and (min-width:640px) and (max-width: 1024px){
+      width: 500px;
+      height: 60px;
+      margin-left:-250px;
+      left:50%;
+      position: absolute;
+      bottom: 30px;
+    }
+    @media screen and (max-width: 639px){
+      height: 40px;
+      margin-left:-50%;
+      left:50%;
+      position: absolute;
+      bottom: 30px;
+      width:100%
+    }
   }
   .input_wrap {
-    //  text-align: center;
-    width: 100%;
-    height: 50px;
-    margin-bottom: 20px;
+    text-align: center;
+    @media screen and (min-width:1025px){
+      width: 100%;
+      height: 50px;
+      margin-bottom: 50px;
+    }
+    @media screen and (min-width:640px) and (max-width: 1024px){
+      width: 100%;
+      height: 60px;
+      margin-bottom: 50px;
+    }
+    @media screen and (max-width: 639px){
+      height: 40px;
+      line-height: 40px;
+      width:100%;
+      margin-bottom: 20px;
+    }
     span {
      display: inline-block;
-     width:100px;
-     height: 40px;
-     color: white
+     width:80px;
+     height: 50px;
+     line-height: 50px;
+     color: white;
+      @media screen and (max-width: 639px){
+      width:50px;
+      height: 40px;
+      line-height: 40px;
+      }
     }
     input {
-    width: 500px;
-    height: 40px;
-    border-radius: 10px
-  }
+      border-radius: 10px;
+      background-color: transparent;
+      @media screen and (min-width:1025px){
+        width: 400px;
+        height: 40px;
+      }
+      @media screen and (min-width:640px) and (max-width: 1024px){
+        width: 400px;
+        height: 50px;
+      }
+      @media screen and (max-width: 639px){
+        width: 80%;
+        height: 40px;
+        line-height: 40px;
+        }
+    }
  }
 }
 
