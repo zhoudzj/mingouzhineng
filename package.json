@@ -70,12 +70,14 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "http-proxy-middleware": "^1.0.3",
     "imagemin-webpack-plugin": "2.4.2",
     "node-sass": "4.14.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "node scripts/start.js ",
+    "start:local": "dotenv -e .env.development.localbackend node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "deploy": "npm run build && bash ./deployProd.sh"

@@ -6,12 +6,8 @@ const createHistory = require('history').createBrowserHistory;
 // 创建axios实例
 const instance = axios.create({ timeout: 1000 * 12 });
 
-let env = process.env.NODE_ENV
-if (env === 'development') {
-    instance.defaults.baseURL = '/app';
-} else if (env === 'production') {
-    instance.defaults.baseURL = 'https://www.365tc.cn/app';
-}
+const local_backend = process.env.REACT_APP_LOCAL_BACKEND
+instance.defaults.baseURL = local_backend;
 
 instance.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -62,7 +58,7 @@ instance.interceptors.response.use(res => {
 const tip = (msg) => {
     message.error({
         content: msg,
-        duration: 1,
+        duration: 2,
     })
 };
 

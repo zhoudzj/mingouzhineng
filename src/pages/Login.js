@@ -19,7 +19,7 @@ const Login = ({ dispatch }) => {
             return
         }
         try {
-            const data = await window.axios.post('/house/list', {
+            const data = await window.axios.post('/user/login', {
                 userName,
                 password
             })
@@ -28,7 +28,7 @@ const Login = ({ dispatch }) => {
                 type: 'ADD_TOKEN',
                 payload: { token: data }
             });
-            const userInfo = await window.axios.post('/login', {
+            const userInfo = await window.axios.post('/house/list', {
                 userName,
                 password
             })
@@ -38,6 +38,16 @@ const Login = ({ dispatch }) => {
             });
             history.push('/')
         } catch(err){
+            console.log(err);
+        }
+    }
+    const haddleRegister = async e => {
+        try {
+            const result = await window.axios.post('/user/register', {
+                userName,
+                password
+            })
+        } catch(err) {
             console.log(err);
         }
     }
@@ -54,6 +64,7 @@ const Login = ({ dispatch }) => {
                 <div className={styles.input_wrap}><span>用户名</span><input onChange={onUserChange} /></div>
                 <div className={styles.input_wrap}><span>密码</span><input type="password" onChange={onPasswordChange} /></div>
                 <button className={styles.button_login} onClick={haddleLogin}>登录</button>
+                <button className={styles.button_register} onClick={haddleRegister}>注册</button>
                 <div className={styles.intro}>powered by Mingou</div>
             </div>
         </div>
