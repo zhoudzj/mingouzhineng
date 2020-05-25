@@ -8,16 +8,23 @@ const Login = ({ dispatch }) => {
     const history = useHistory();
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
-    const haddleLogin = async () => {
-
+    const checked = () => {
         if (!userName) {
             message.info('请输入用户名！');
-            return
+            return false
         }
         if (!password) {
             message.info('请输入密码！');
-            return
+            return false
         }
+        if (password.length<6||password.length>12) {
+            message.info('清输入6-12位密码！');
+            return false
+        }
+        return true
+    };
+    const haddleLogin = async () => {
+        if(!checked()) return;
         try {
             const data = await window.axios.post('/user/login', {
                 userName,
@@ -26,9 +33,9 @@ const Login = ({ dispatch }) => {
             console.log(data);
             dispatch({
                 type: 'ADD_TOKEN',
-                payload: { token: data }
+                payload: { token: data.token }
             });
-            const userInfo = await window.axios.post('/house/list', {
+            const userInfo = await window.axios.post('/user/getUserInfo', {
                 userName,
                 password
             })
@@ -42,6 +49,7 @@ const Login = ({ dispatch }) => {
         }
     }
     const haddleRegister = async e => {
+        if(!checked()) return;
         try {
             const result = await window.axios.post('/user/register', {
                 userName,

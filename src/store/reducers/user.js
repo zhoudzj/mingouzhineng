@@ -8,8 +8,10 @@ const initState = {
 export default (state = initState,action) =>{
     switch (action.type) {
         case ADD_TOKEN:
+            const token = action.payload.token;
+            localStorage.setItem("token",token)
             return Object.assign({},state,{
-                token:action.payload.token
+                token
             })
         case SET_USERINFO:
             return Object.assign({},state,{
