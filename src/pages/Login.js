@@ -3,6 +3,7 @@ import { Switch, Route, Link, useHistory } from 'react-router-dom'
 import styles from "../assets/scss/login.scss"
 import { message } from 'antd';
 import { connect } from 'react-redux';
+import {getLogin,getUserInfo,getRegister} from '../config/api'
 
 const Login = ({ dispatch }) => {
     const history = useHistory();
@@ -26,16 +27,15 @@ const Login = ({ dispatch }) => {
     const haddleLogin = async () => {
         if(!checked()) return;
         try {
-            const data = await window.axios.post('/user/login', {
+            await getLogin({
                 userName,
                 password
             })
-            console.log(data);
             dispatch({
                 type: 'ADD_TOKEN',
                 payload: { token: data.token }
             });
-            const userInfo = await window.axios.post('/user/getUserInfo', {
+            const userInfo = await getUserInfo({
                 userName,
                 password
             })
@@ -51,7 +51,7 @@ const Login = ({ dispatch }) => {
     const haddleRegister = async e => {
         if(!checked()) return;
         try {
-            const result = await window.axios.post('/user/register', {
+            await getRegister({
                 userName,
                 password
             })
