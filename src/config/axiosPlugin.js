@@ -1,18 +1,21 @@
 import axios from 'axios'
 import { message } from 'antd';
 import store from '../store';
-const createHistory = require('history').createBrowserHistory;
+import history from '../history'
 
 // 创建axios实例
 const instance = axios.create({ timeout: 1000 * 12 });
 
-const local_backend = process.env.REACT_APP_LOCAL_BACKEND
-instance.defaults.baseURL = local_backend;
+const base_url = process.env.REACT_APP_BASE_URL
+instance.defaults.baseURL = base_url;
 
 instance.defaults.headers.post['Content-Type'] = 'application/json';
 
 instance.interceptors.request.use(config => {
-    config.headers.Authorization = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+    if(token) {
+        config.headers.Authorization = token
+    }
     return config
 }, error => {
     return Promise.reject(error);
@@ -22,7 +25,10 @@ instance.interceptors.response.use(res => {
     if (res.status === 200) {
         if (res.data.code === 200) {
             return Promise.resolve(res.data.data);
-        } else {
+        } else if(res.data.code === 1301||res.data.code === 1302){
+            tip(res.data.message);
+            toLogin()
+        }else {
             tip(res.data.message);
             return Promise.reject(res.data.message);
         }
@@ -31,8 +37,9 @@ instance.interceptors.response.use(res => {
     }
 }, error => {
     const { response } = error;
+            console.log(error)
     if (response) {
-        // 请求已发出，但是不在2xx的范围
+        // 请求已发出
         errorHandle(response.status, response.data);
         return Promise.reject(response);
     } else {
@@ -41,6 +48,7 @@ instance.interceptors.response.use(res => {
         // network状态控制着一个全局的断网提示组件的显示隐藏
         // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
         if (!window.navigator.onLine) {
+            console.log(error)
             store.dispatch({
                 type: 'CHANGE_NETWORK',
                 payload: { network: false }
@@ -67,7 +75,7 @@ const tip = (msg) => {
  * 携带当前页面路由，以期在登录页面完成登录后返回当前页面
  */
 const toLogin = () => {
-    createHistory().push('/login')
+    history.push('/login')
 };
 
 const errorHandle = (status, other) => {

@@ -8,7 +8,7 @@ import styles from "../assets/css/home.css"
 const HouseInfos = [{ url: require('../assets/img/lanseqianjiang.png'), title: '春月锦庐' }]
 
 const initialState = {
-  headerTitle: '选择项目',
+  headerTitle: '项目名称',
   testObj:null
 }
 

@@ -3,6 +3,9 @@ import {useHistory, withRouter} from 'react-router-dom'
 import {ReactDOM} from 'react-router-dom'
 import styles from '../assets/css/header_hoc.css'
 import {Modal} from 'antd';
+import {connect} from 'react-redux';
+import {loginOut} from '../config/api'
+
 const { confirm } = Modal;
 
 const HeaderHOC = WrappedComponent => {
@@ -12,11 +15,11 @@ const HeaderHOC = WrappedComponent => {
       this.handleLogout = this
         .handleLogout
         .bind(this)
-      this.state = {
-        data: "初始化"
-      };
+      this.userName = this.props.userInfo ? this.props.userInfo.name : '用户名';
     }
-    componentWillMount() {}
+    componentWillMount() {
+      console.log(this.props)
+    }
     handleLogout() {
       const that = this;
       confirm({
@@ -24,17 +27,20 @@ const HeaderHOC = WrappedComponent => {
         content: '成功退出后将跳转到登录界面',
         okText:"确认",
         cancelText:"取消",
-        onOk() {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => {
-              that.setState({data: "改变数据"});
-              resolve();
-              that
-                .props
-                .history
-                .push('/login');
-            }, 500);
-          }).catch(() => console.log('退出登录失败!'));
+        onOk:async()=> {
+          try {
+              // await loginOut();
+              that.props.dispatch({
+                type: 'REMOVE_TOKEN'
+            });
+
+            // that
+            //     .props
+            //     .history
+            //     .push('/login');
+          } catch (error) {
+            console.log(error)
+          }
         },
         onCancel() {}
       })
@@ -45,14 +51,20 @@ const HeaderHOC = WrappedComponent => {
         <div>
           <WrappedComponent {...this.props}>
             <div className={styles.hoc}>
-              <span className={styles.user}>用户名</span>|<span className={styles.logout} onClick={this.handleLogout}>退出</span>
+              <span className={styles.user}>{this.userName}</span>|<span className={styles.logout} onClick={this.handleLogout}>退出</span>
             </div>
           </WrappedComponent>
         </div>
       )
     }
   }
-  return withRouter(Headers)
+  return withRouter(connect(mapStateToProps)(Headers))
+}
+
+const mapStateToProps = (state) => {
+    return {
+        ...state.user
+    }
 }
 
 export default HeaderHOC

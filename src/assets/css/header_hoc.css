@@ -3,8 +3,19 @@
   margin-right: 20px
 }
 
+.user {
+    display: inline-block;
+    width:50px;
+    color: #61C7FF
+}
+
+.logout {
+  display: inline-block;
+    width:50px;
+}
+
 .user:hover {
-  color: orangered
+  color: orangered;
 }
 
 .logout:hover {

@@ -12,7 +12,7 @@ const Order = () => {
   const match = useRouteMatch();
   const [mode,
     setMode] = useState('left');
-  const [roomArray] = useState(['三室两厅', '两室一厅', '三室一厅']);
+  const [roomArray] = useState(['A户型', 'B2户型', 'C1户型','C2户型','E户型']);
   return (
     <Switch>
       <Route path={`${match.path}/:index`}>

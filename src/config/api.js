@@ -6,12 +6,17 @@ export const getLogin = (param) => {
 }
 
 export const getUserInfo = (param) => {
-    const url = '/user/login';
+    const url = '/user/getUserInfo';
     return axios.post(url,param)
 }
 
 export const getRegister = (param) => {
     const url = '/user/register';
+    return axios.post(url,param)
+}
+
+export const loginOut = (param) => {
+    const url = '/user/logout';
     return axios.post(url,param)
 }
 

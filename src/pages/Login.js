@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { Switch, Route, Link, useHistory } from 'react-router-dom'
+import React, {useState} from 'react';
+import {Switch, Route, Link, useHistory} from 'react-router-dom'
 import styles from "../assets/scss/login.scss"
-import { message } from 'antd';
-import { connect } from 'react-redux';
-import {getLogin,getUserInfo,getRegister} from '../config/api'
+import {message} from 'antd';
+import {connect} from 'react-redux';
+import {getLogin, getUserInfo, getRegister} from '../config/api'
 
-const Login = ({ dispatch }) => {
+const Login = ({dispatch}) => {
     const history = useHistory();
-    const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
+    const [userName,
+        setUserName] = useState('');
+    const [password,
+        setPassword] = useState('');
     const checked = () => {
         if (!userName) {
             message.info('请输入用户名！');
@@ -18,44 +20,39 @@ const Login = ({ dispatch }) => {
             message.info('请输入密码！');
             return false
         }
-        if (password.length<6||password.length>12) {
+        if (password.length < 6 || password.length > 12) {
             message.info('清输入6-12位密码！');
             return false
         }
         return true
     };
-    const haddleLogin = async () => {
-        if(!checked()) return;
+    const haddleLogin = async() => {
+        if (!checked()) 
+            return;
         try {
-            await getLogin({
-                userName,
-                password
-            })
+            const data = await getLogin({userName, password})
             dispatch({
                 type: 'ADD_TOKEN',
-                payload: { token: data.token }
+                payload: {
+                    token: data.token
+                }
             });
-            const userInfo = await getUserInfo({
-                userName,
-                password
-            })
-            dispatch({
-                type: 'SET_USERINFO',
-                payload: { userInfo }
-            });
+            const userInfo = await getUserInfo({userName, password})
+            dispatch({type: 'SET_USERINFO', payload: {
+                    userInfo
+                }});
             history.push('/')
-        } catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
     const haddleRegister = async e => {
-        if(!checked()) return;
+        if (!checked()) 
+            return;
         try {
-            await getRegister({
-                userName,
-                password
-            })
-        } catch(err) {
+            await getRegister({userName, password});
+            message.info('注册成功请登录!');
+        } catch (err) {
             console.log(err);
         }
     }
@@ -69,8 +66,10 @@ const Login = ({ dispatch }) => {
         <div className={styles.Login}>
             <header className={styles.Login_header}>一站式智能场景选装</header>
             <div className={styles.content_wrap}>
-                <div className={styles.input_wrap}><span>用户名</span><input onChange={onUserChange} /></div>
-                <div className={styles.input_wrap}><span>密码</span><input type="password" onChange={onPasswordChange} /></div>
+                <div className={styles.input_wrap}>
+                    <span>用户名</span><input onChange={onUserChange}/></div>
+                <div className={styles.input_wrap}>
+                    <span>密码</span><input type="password" onChange={onPasswordChange}/></div>
                 <button className={styles.button_login} onClick={haddleLogin}>登录</button>
                 <button className={styles.button_register} onClick={haddleRegister}>注册</button>
                 <div className={styles.intro}>powered by Mingou</div>
