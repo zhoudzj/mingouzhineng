@@ -4,17 +4,13 @@ import {Link, useRouteMatch, useHistory} from 'react-router-dom';
 
 const COMBO_DATA = [
   {
-    url: require('../assets/img/A_combo.png'),
+    url: require('../assets/img/style_house/A_luxury.png'),
     id: 200,
-    name: 'A档推荐套餐'
+    name: '豪华套餐'
   }, {
-    url: require('../assets/img/B_combo.png'),
+    url: require('../assets/img/style_house/A_standard.png'),
     id: 300,
-    name: 'B档推荐套餐'
-  }, {
-    url: require('../assets/img/C_combo.png'),
-    id: 400,
-    name: 'C档推荐套餐'
+    name: '标准套餐'
   }
 ];
 

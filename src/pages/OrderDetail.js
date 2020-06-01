@@ -87,21 +87,7 @@ const OrderDetail = () => {
   const match = useRouteMatch();
   const [tableData,
     setTableData] = useState([])
-
-  const plus = (e, row) => {
-    row.number += 1;
-    row.totalPrice = row.price * row.number;
-    const newData = [...tableData];
-    setTableData(newData);
-  }
-  const minus = (e, row) => {
-    if (row.number === 0) 
-      return;
-    row.number -= 1;
-    row.totalPrice = row.price * row.number;
-    const newData = [...tableData];
-    setTableData(newData)
-  }
+    
   const columns = [
     {
       title: '设备名称',
@@ -163,17 +149,11 @@ const OrderDetail = () => {
             )
             : ""}
           <span>
-            <button onClick={(e) => {
-              minus(e, row)
-            }}>-</button>
             <span
               style={{
               textAlign: 'center',
               margin: '10px'
             }}>{value}</span>
-            <button onClick={(e) => {
-              plus(e, row)
-            }}>+</button>
           </span>
           <span
             style={{

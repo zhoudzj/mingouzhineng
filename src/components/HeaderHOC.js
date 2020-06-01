@@ -29,15 +29,10 @@ const HeaderHOC = WrappedComponent => {
         cancelText:"取消",
         onOk:async()=> {
           try {
-              // await loginOut();
+              await loginOut();
               that.props.dispatch({
                 type: 'REMOVE_TOKEN'
             });
-
-            // that
-            //     .props
-            //     .history
-            //     .push('/login');
           } catch (error) {
             console.log(error)
           }
