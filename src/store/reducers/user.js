@@ -1,6 +1,6 @@
 import {ADD_TOKEN,SET_USERINFO,REMOVE_TOKEN} from '../actions/user'
 import history from '../../history'
-let userInfo = sessionStorage.getItem('userInfo')?JSON.parse(sessionStorage.getItem('userInfo')):null;
+let userInfo = localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):null;
 let token = localStorage.getItem('token')?localStorage.getItem('token'):'';
 const initState = {
     token,
@@ -17,7 +17,7 @@ export default (state = initState,action) =>{
             })
         case SET_USERINFO:
             const userInfo = action.payload.userInfo;
-            sessionStorage.setItem("userInfo",JSON.stringify(userInfo));
+            localStorage.setItem("userInfo",JSON.stringify(userInfo));
             return Object.assign({},state,{
                 userInfo
             })
