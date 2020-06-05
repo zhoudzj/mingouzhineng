@@ -13,24 +13,8 @@
     line-height: 100px;
     height: 100px;
   }
-  .content_wrap {
-    margin: auto;
-    position: relative;
-    @media screen and (min-width:1025px){
-      width: 600px;
-      height: 400px;
-      padding: 50px 0 0;
-    }
-    @media screen and (min-width:640px) and (max-width: 1024px){
-      width: 600px;
-      height: 550px;
-      padding: 50px 0 0;
-    }
-    @media screen and (max-width: 639px){
-      height: 60vh;
-      margin: 50px 15vw 0;
-    }
-    .intro {
+
+  .intro {
       left:50%;
       transform: translatex(-50%);
       height: 30px;
@@ -40,7 +24,6 @@
         font-size: 20px;
       }
     }
-  }
   .button_login {
     border-radius: 30px;
     background: $bgcolor;
@@ -131,16 +114,29 @@
   }
 }
 
-
 :global {
   #test {
      .card-container > .ant-tabs-card .ant-tabs-content {
-  height: 120px;
-  margin-top: -16px;
+    margin: auto;
+    position: relative;
+    @media screen and (min-width:1025px){
+      width: 600px;
+      height: 400px;
+      padding: 20px 0 0;
+    }
+    @media screen and (min-width:640px) and (max-width: 1024px){
+      width: 600px;
+      height: 550px;
+      padding: 20px 0 0;
+    }
+    @media screen and (max-width: 639px){
+      height: 60vh;
+      margin: 50px 15vw 0;
+    }
 }
 
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
-  background: #fff;
+  background: transparent;
   padding: 16px;
 }
 
@@ -155,8 +151,8 @@
   border-color: #fff;
   background: #fff;
 }
-  }
  }
+}
 
 
 
