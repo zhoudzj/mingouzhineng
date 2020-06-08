@@ -20,7 +20,6 @@ const HeaderHOC = WrappedComponent => {
     componentWillMount() {
     }
     handleLogout() {
-      const that = this;
       confirm({
         title: '确定退出登录吗?',
         content: '成功退出后将跳转到登录界面',
@@ -29,9 +28,11 @@ const HeaderHOC = WrappedComponent => {
         onOk:async()=> {
           try {
               await loginOut();
-              that.props.dispatch({
-                type: 'REMOVE_TOKEN'
+              this.props.dispatch({
+                type: 'REMOVE_TOKEN',
+                payload: { token: '',userInfo:'' }
             });
+              this.props.history.push('/login');
           } catch (error) {
             console.log(error)
           }

@@ -25,10 +25,14 @@ instance.interceptors.response.use(res => {
     if (res.status === 200) {
         if (res.data.code === 200) {
             return Promise.resolve(res.data.data);
-        } else if(res.data.code === 1301||res.data.code === 1302){
+        } else if(res.data.code === 1301){
             tip(res.data.message);
-            toLogin()
-        }else {
+            toLogin();
+        }else if(res.data.code === 1302){
+            tip(res.data.message);
+            localStorage.removeItem("token");
+            toLogin();
+        } else{
             tip(res.data.message);
             return Promise.reject(res.data.message);
         }
