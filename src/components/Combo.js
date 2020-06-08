@@ -1,39 +1,64 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from "../assets/css/combo.css";
-import {Link, useRouteMatch, useHistory} from 'react-router-dom';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import errorImg from '../assets/img/inner.jpg'
 
 const COMBO_DATA = [
-  {
-    img: require('../assets/img/style_house/A_luxury.png'),
-    id: 200,
-    name: '豪华套餐'
-  }, {
-    img: require('../assets/img/style_house/A_standard.png'),
-    id: 300,
-    name: '标准套餐'
-  }
 ];
 
-const Combo = ({getCombo,typeId}) => {
+const Combo = ({ getCombo, typeId }) => {
   const match = useRouteMatch();
+
   const [comboData,
     setComboData] = useState(COMBO_DATA);
+  const [loadImgArr, setLoadImgArr] = useState([]);
 
-    useEffect(()=>{
-      const getData = async ()=>{
-        const data = await getCombo({typeId});
-        setComboData(data);
-        console.log(comboData);
+  useEffect(() => {
+
+    const loadImage = (src) => {
+      return new Promise(function (resolve, reject) {
+        let img = new Image();
+        img.onload = function () {//加载时执行resolve函数
+          resolve(img);
+        }
+        img.onerror = function () {
+          img.src = errorImg;
+          resolve(img);
+        }
+        img.src = src;
+      })
+    }
+
+    const fn = async (resData) => {
+      let arr = [];
+      for (let i = 0; i < resData.length; i++) {
+        const img = await loadImage("http://www.365tc.cn" + resData[i].img);
+        arr.push(img);
       }
-      getData();
-    },[typeId])
+      return arr;
+    }
+    const fetchData = async () => {
+      const data = await getCombo({ typeId });
+      const arr = await fn(data);
+      console.log(arr);
+      setLoadImgArr(arr);
+      setComboData(data);
+    }
+
+    fetchData().then(() => {
+    }).catch((e)=>{
+      console.log(e);
+    });
+
+  }, [typeId])
+
   return (
     <div className={styles.g_combos}>
       {comboData.map((item, index) => (
         <Link to={`${match.url}/:${String(item.id)}`} key={index}>
-          <div  className={styles.combo_wrap}>
-            <img className={styles.img_wrap} src={typeof(item.img)==="string"? "http://www.365tc.cn"+item.img:item.img}/>
-            <span >{item.name}</span>
+          <div className={styles.combo_wrap}>
+            <img className={styles.img_wrap} src={loadImgArr[index].src} />
+            <span>{item.name}</span>
           </div>
         </Link>
       ))}
