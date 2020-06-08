@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import { Switch, Route, Redirect,Link,useHistory } from 'react-router-dom'
 import {connect} from 'react-redux';
+import NetworkReconnect from './components/NetworkReconnect';
 
 function App() {
   const history = useHistory();
@@ -17,8 +18,9 @@ function App() {
   return (
        <Switch>
           <Route path={"/login"} exact>
-           <Login />
-         </Route>
+            <NetworkReconnect/>
+            <Login />
+          </Route>
           <Route path={"/house"}>
           <div className={styles.App}>
             <Home />

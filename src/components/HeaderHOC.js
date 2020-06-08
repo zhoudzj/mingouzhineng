@@ -18,7 +18,6 @@ const HeaderHOC = WrappedComponent => {
       this.userName = this.props.userInfo ? this.props.userInfo.name : '用户名';
     }
     componentWillMount() {
-      console.log(this.props)
     }
     handleLogout() {
       const that = this;

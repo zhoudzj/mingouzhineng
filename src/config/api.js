@@ -20,3 +20,8 @@ export const loginOut = (param) => {
     return axios.post(url,param)
 }
 
+export const getCombo = (param) => {
+    const url = '/style/findByTypeId';
+    return axios.post(url,param)
+}
+

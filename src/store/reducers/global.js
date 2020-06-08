@@ -1,7 +1,7 @@
 import {CHANGE_NETWORK} from '../actions/global'
 
 const initState = {
-    network: false,
+    network: true,
 }
 
 export default (state = initState,action) =>{

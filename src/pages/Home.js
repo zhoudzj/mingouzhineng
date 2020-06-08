@@ -33,7 +33,6 @@ const Home = () => {
 
     useEffect(() => {
         return () => {
-            console.log(match);
         };
     },[]);
 

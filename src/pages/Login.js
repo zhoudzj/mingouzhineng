@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
-import {Switch, Route, Link, useHistory} from 'react-router-dom'
-import styles from "../assets/scss/login.scss"
+import {Switch, Route, Link, useHistory} from 'react-router-dom';
+import styles from "../assets/scss/login.scss";
 import {message, Input, Button, Tabs} from 'antd';
 import {connect} from 'react-redux';
-import {getLogin, getUserInfo, getRegister} from '../config/api'
+import {getLogin, getUserInfo, getRegister} from '../config/api';
+import { UserOutlined, LockOutlined, LockFilled, PhoneFilled } from '@ant-design/icons';
+import LoginCpn from '../components/LoginCpn.js'
+
 const {TabPane} = Tabs;
 
 const Login = ({dispatch}) => {
@@ -68,21 +71,11 @@ const Login = ({dispatch}) => {
             <header className={styles.Login_header}>一站式智能场景选装</header>
             <div className="card-container">
                 <Tabs type="card">
-                    <TabPane tab="登录" key="1">
-                <div className={styles.input_wrap}>
-                    <input size="large" placeholder="请输入用户名" onChange={onUserChange}/></div>
-                <div className={styles.input_wrap}>
-                    <input type="password" size="large" placeholder="请输入密码" onChange={onPasswordChange}/></div>
-                <button className={styles.button_login} onClick={haddleLogin}>登录</button>
-                <div className={styles.intro}>powered by Mingou</div>
+                    <TabPane tab="登 录" key="1">
+                        <LoginCpn btnText="登 录" onUserChange={onUserChange} onPasswordChange={onPasswordChange} onClick={haddleLogin}/>
                     </TabPane>
-                    <TabPane tab="注册" key="2">
-                <div className={styles.input_wrap}>
-                    <input size="large" placeholder="请输入用户名" onChange={onUserChange}/></div>
-                <div className={styles.input_wrap}>
-                    <input type="password" size="large" placeholder="请输入密码" onChange={onPasswordChange}/></div>
-                <button className={styles.button_login} onClick={haddleRegister}>注册</button>
-                <div className={styles.intro}>powered by Mingou</div>
+                    <TabPane tab="注 册" key="2">
+                        <LoginCpn btnText="注 册" onUserChange={onUserChange} onPasswordChange={onPasswordChange} onClick={haddleRegister}/>
                     </TabPane>
                 </Tabs>
             </div>

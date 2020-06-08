@@ -5,6 +5,7 @@ import styles from "../assets/css/order.css";
 import Combo from "../components/Combo";
 import OrderDetail from "./OrderDetail"
 import HouseHeader from "../components/HouseHeader"
+import {getCombo} from '../config/api'
 
 const {TabPane} = Tabs;
 
@@ -12,7 +13,7 @@ const Order = () => {
   const match = useRouteMatch();
   const [mode,
     setMode] = useState('left');
-  const [roomArray] = useState(['A户型', 'B2户型', 'C1户型','C2户型','E户型']);
+  const [roomArray] = useState([{typeId:1001,name:'A户型'}, {typeId:1002,name:'B2户型'}, {typeId:1003,name:'C1户型'},{typeId:1004,name:'C2户型'},{typeId:1005,name:'E户型'}]);
   return (
     <Switch>
       <Route path={`${match.path}/:index`}>
@@ -30,8 +31,8 @@ const Order = () => {
             tabPosition={mode}
             >
             {roomArray.map(i => (
-              <TabPane tab={i} key={i}>
-                <Combo key={i}/>
+              <TabPane tab={i.name} key={i.typeId}>
+                <Combo key={i.typeId} getCombo={getCombo} typeId={i.typeId}/>
               </TabPane>
             ))}
           </Tabs>

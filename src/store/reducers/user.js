@@ -23,9 +23,11 @@ export default (state = initState,action) =>{
             })
         case REMOVE_TOKEN:
             localStorage.removeItem("token");
+            localStorage.removeItem("userInfo");
             history.push('/login');
             return Object.assign({},state,{
-                token:''
+                token:'',
+                userInfo:''
             })
         default:
             return state;

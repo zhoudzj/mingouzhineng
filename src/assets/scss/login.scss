@@ -1,121 +1,35 @@
 @import "common";
 
 .Login {
+    color: white!important;
     height: 100vh;
     background-image: url(../img/boyDream_bg.jpeg);
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    overflow: hidden;
 
   &_header {
+    margin-top: 100px;
     font-size: 30px;
     font-weight: bold;
     text-align: center;
     line-height: 100px;
     height: 100px;
-  }
-
-  .intro {
-      left:50%;
-      transform: translatex(-50%);
-      height: 30px;
-      position: absolute;
-      bottom:0;
-      @media screen and (min-width:1025px){
-        font-size: 20px;
-      }
-    }
-  .button_login {
-    border-radius: 30px;
-    background: $bgcolor;
-    @media screen and (min-width:1025px){
-      width: 500px;
-      height: 50px;
-      margin-left:-250px;
-      left:50%;
-      position: absolute;
-      bottom: 100px;
-    }
-    @media screen and (min-width:640px) and (max-width: 1024px){
-      width: 500px;
-      height: 60px;
-      margin-left:-250px;
-      left:50%;
-      position: absolute;
-      bottom: 30px;
-    }
-    @media screen and (max-width: 639px){
-      height: 40px;
-      margin-left:-50%;
-      left:50%;
-      position: absolute;
-      bottom: 30px;
-      width:100%
-    }
-  }
-  .button_register {
-    border-radius: 30px;
-    background: $bgcolor;
-    @media screen and (min-width:1025px){
-      width: 500px;
-      height: 50px;
-      margin-left:-250px;
-      left:50%;
-      position: absolute;
-      bottom: 30px;
-    }
-  }
-  .input_wrap {
-    text-align: center;
-    @media screen and (min-width:1025px){
-      width: 100%;
-      height: 50px;
-      margin-bottom: 50px;
-    }
-    @media screen and (min-width:640px) and (max-width: 1024px){
-      width: 100%;
-      height: 60px;
-      margin-bottom: 50px;
-    }
-    @media screen and (max-width: 639px){
-      height: 40px;
-      line-height: 40px;
-      width:100%;
-      margin-bottom: 20px;
-    }
-    span {
-     display: inline-block;
-     width:80px;
-     height: 50px;
-     line-height: 50px;
-     color: white;
-      @media screen and (max-width: 639px){
-      width:50px;
-      height: 40px;
-      line-height: 40px;
-      }
-    }
-    input {
-      border-radius: 10px;
-      background-color: transparent;
-      @media screen and (min-width:1025px){
-        width: 400px;
-        height: 40px;
-      }
-      @media screen and (min-width:640px) and (max-width: 1024px){
-        width: 400px;
-        height: 50px;
-      }
-      @media screen and (max-width: 639px){
-        width: 80%;
-        height: 40px;
-        line-height: 40px;
-        }
-    }
+    letter-spacing: 14px
   }
 }
 
 :global {
   #test {
+    .ant-tabs {
+      color: white
+    }
+    .ant-tabs-bar {
+        border-bottom: 0;
+        .ant-tabs-nav-container {
+          text-align: center
+        }
+    }
      .card-container > .ant-tabs-card .ant-tabs-content {
     margin: auto;
     position: relative;
@@ -133,25 +47,28 @@
       height: 60vh;
       margin: 50px 15vw 0;
     }
-}
-
+  }
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
+  margin: auto;
+  width:400px;
   background: transparent;
-  padding: 16px;
-}
-
+  }
 .card-container > .ant-tabs-card > .ant-tabs-nav::before {
   display: none;
-}
+  }
 .card-container > .ant-tabs-card .ant-tabs-tab {
-  border-color: transparent;
-  background: transparent;
-}
+  width: 200px;
+  border-color: darkgray;
+  background: darkgray;
+    color: gray
+
+  }
 .card-container > .ant-tabs-card .ant-tabs-tab-active {
-  border-color: #fff;
-  background: #fff;
+  border-color: black;
+  background: black;
+  color: white
+  }
 }
- }
 }
 
 
