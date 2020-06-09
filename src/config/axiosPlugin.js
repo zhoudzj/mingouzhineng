@@ -41,7 +41,7 @@ instance.interceptors.response.use(res => {
     }
 }, error => {
     const { response } = error;
-            console.log(error)
+            console.log(response)
     if (response) {
         // 请求已发出
         errorHandle(response.status, response.data);

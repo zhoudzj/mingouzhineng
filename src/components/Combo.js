@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from "../assets/css/combo.css";
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import errorImg from '../assets/img/inner.jpg'
-
+const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 const COMBO_DATA = [
 ];
 
@@ -32,7 +32,7 @@ const Combo = ({ getCombo, typeId }) => {
     const fn = async (resData) => {
       let arr = [];
       for (let i = 0; i < resData.length; i++) {
-        const img = await loadImage("http://www.365tc.cn" + resData[i].img);
+        const img = await loadImage(pictureDomian + resData[i].img);
         arr.push(img);
       }
       return arr;
@@ -40,7 +40,6 @@ const Combo = ({ getCombo, typeId }) => {
     const fetchData = async () => {
       const data = await getCombo({ typeId });
       const arr = await fn(data);
-      console.log(arr);
       setLoadImgArr(arr);
       setComboData(data);
     }
