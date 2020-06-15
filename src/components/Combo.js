@@ -54,7 +54,7 @@ const Combo = ({ getCombo, typeId }) => {
   return (
     <div className={styles.g_combos}>
       {comboData.map((item, index) => (
-        <Link to={`${match.url}/:${String(item.id)}`} key={index}>
+        <Link to={`${match.url}/${String(item.id)}`} key={index}>
           <div className={styles.combo_wrap}>
             <img className={styles.img_wrap} src={loadImgArr[index].src} />
             <span>{item.name}</span>

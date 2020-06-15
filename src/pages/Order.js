@@ -16,7 +16,7 @@ const Order = () => {
   const [roomArray] = useState([{typeId:1001,name:'A户型'}, {typeId:1002,name:'B2户型'}, {typeId:1003,name:'C1户型'},{typeId:1004,name:'C2户型'},{typeId:1005,name:'E户型'}]);
   return (
     <Switch>
-      <Route path={`${match.path}/:index`}>
+      <Route path={`${match.path}/:styleId`}>
         <OrderDetail/>
       </Route>
       <Route path={`${match.path}`}>

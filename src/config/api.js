@@ -25,3 +25,8 @@ export const getCombo = (param) => {
     return axios.post(url,param)
 }
 
+export const getProductList = (param) => {
+    const url = '/product/list';
+    return axios.post(url,param)
+}
+
