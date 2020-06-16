@@ -19,7 +19,7 @@ const OrderDetail = () => {
       title: '设备名称',
       dataIndex: 'type',
       key: 'id',
-      width: '100px',
+      width: '150px',
       // textWrap: 'word-break',
       ellipsis: true,
       render: (value, row, index) => {
@@ -27,11 +27,14 @@ const OrderDetail = () => {
           children: value,
           props: {}
         };
-        if (row.typeId === 300 || row.typeId === 400 || row.typeId === 600 || row.typeId === 800) {
+        if (row.id===3||row.id===4||row.id===5||row.id===24||row.id===27) {
           obj.props.rowSpan = 2;
           return obj;
-        } else {
+        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29){
           obj.props.rowSpan = 0;
+          return obj;
+        } else {
+          obj.props.rowSpan = 1;
           return obj
         }
       }
@@ -47,10 +50,10 @@ const OrderDetail = () => {
           children: <img className={styles.g_img} src={pictureDomian+value}/>,
           props: {}
         };
-        if(row.id===3||row.id===4||row.id===5){
+        if(row.id===3||row.id===4||row.id===5||row.id===24||row.id===27){
           obj.props.rowSpan = 2;
           return obj
-        } else if(row.id===7||row.id===8||row.id===9){
+        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29){
           obj.props.rowSpan = 0;
           return obj
         } else {
