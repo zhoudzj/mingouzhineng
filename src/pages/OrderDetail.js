@@ -18,7 +18,6 @@ const OrderDetail = () => {
     {
       title: '设备名称',
       dataIndex: 'type',
-      key: 'id',
       width: '150px',
       // textWrap: 'word-break',
       ellipsis: true,
@@ -63,7 +62,6 @@ const OrderDetail = () => {
     }, {
       title: '描述',
       dataIndex: 'description',
-      key: 'id',
       width: '350px',
       ellipsis: true,
       render: (value) => {
@@ -72,7 +70,6 @@ const OrderDetail = () => {
     }, {
       title: '数量',
       dataIndex: 'number',
-      key: 'id',
       width: '250px',
       ellipsis: true,
       render: (value, row, index) => (
@@ -130,6 +127,7 @@ const OrderDetail = () => {
         <Table
           columns={columns}
           dataSource={tableData}
+          rowKey='id'
           pagination={false}
           bordered
           summary={(pageData) => {
