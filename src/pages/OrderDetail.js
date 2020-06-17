@@ -29,8 +29,11 @@ const OrderDetail = () => {
         if (row.id===3||row.id===4||row.id===5||row.id===24||row.id===27) {
           obj.props.rowSpan = 2;
           return obj;
-        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29){
+        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29||(row.typeId===400&&!('length'in row))){
           obj.props.rowSpan = 0;
+          return obj;
+        } else if('length'in row) {
+          obj.props.rowSpan = row.length;
           return obj;
         } else {
           obj.props.rowSpan = 1;
@@ -40,11 +43,10 @@ const OrderDetail = () => {
     }, {
       title: '图片',
       dataIndex: 'img',
-      key: 'id',
       width: '150px',
       ellipsis: true,
       render: (value, row, index) => {
-        console.log(row);
+        // console.log(row);
         const obj = {
           children: <img className={styles.g_img} src={pictureDomian+value}/>,
           props: {}
@@ -52,9 +54,12 @@ const OrderDetail = () => {
         if(row.id===3||row.id===4||row.id===5||row.id===24||row.id===27){
           obj.props.rowSpan = 2;
           return obj
-        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29){
+        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29||(row.typeId===400&&!('length'in row))){
           obj.props.rowSpan = 0;
           return obj
+        } else if('length'in row) {
+          obj.props.rowSpan = row.length;
+          return obj;
         } else {
           return obj
         }
@@ -74,7 +79,7 @@ const OrderDetail = () => {
       ellipsis: true,
       render: (value, row, index) => (
         <div>
-          {(row.typeId === 300) && (index === 1)
+          {/* {(row.typeId === 300) && (index === 1)
             ? (
               <div style={{
                 float: "right"
@@ -84,7 +89,7 @@ const OrderDetail = () => {
                 </Link>
               </div>
             )
-            : ""}
+            : ""} */}
           <span>
             <span
               style={{
@@ -101,11 +106,17 @@ const OrderDetail = () => {
       )
     }
   ];
-
+ 
   useEffect(() => {
     const fetchData = async() => {
       const rawData = await getProductList({id:match.params.styleId});
-      const newData = rawData.map(item => {
+      const typeIdArr = rawData.filter(record=>record.typeId ===400);
+      const typeId_firstIndex = rawData.findIndex(value=>value.typeId===400);
+
+      const newData = rawData.map((item,index) => {
+        if(index===typeId_firstIndex){
+          item.length = typeIdArr.length
+        }
         return {
           ...item,
           totalPrice: item.price * item.number
@@ -125,6 +136,7 @@ const OrderDetail = () => {
       <Route path={`${match.path}`}>
         <HouseHeader title={"选择推荐"}/>
         <Table
+          rowKey="id"
           columns={columns}
           dataSource={tableData}
           rowKey='id'
