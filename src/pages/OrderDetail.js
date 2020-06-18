@@ -26,10 +26,10 @@ const OrderDetail = () => {
           children: value,
           props: {}
         };
-        if (row.id===3||row.id===4||row.id===5||row.id===24||row.id===27) {
+        if (row.childId === 1) {
           obj.props.rowSpan = 2;
           return obj;
-        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29||(row.typeId===400&&!('length'in row))){
+        } else if(row.childId !== 1){
           obj.props.rowSpan = 0;
           return obj;
         } else if('length'in row) {
@@ -46,15 +46,14 @@ const OrderDetail = () => {
       width: '150px',
       ellipsis: true,
       render: (value, row, index) => {
-        // console.log(row);
         const obj = {
           children: <img className={styles.g_img} src={pictureDomian+value}/>,
           props: {}
         };
-        if(row.id===3||row.id===4||row.id===5||row.id===24||row.id===27){
+        if(row.childId === 1){
           obj.props.rowSpan = 2;
           return obj
-        } else if(row.id===7||row.id===8||row.id===9||row.id===25||row.id===28||row.id===29||(row.typeId===400&&!('length'in row))){
+        } else if(row.childId !== 1){
           obj.props.rowSpan = 0;
           return obj
         } else if('length'in row) {
@@ -69,8 +68,23 @@ const OrderDetail = () => {
       dataIndex: 'description',
       width: '350px',
       ellipsis: true,
-      render: (value) => {
-        return <span className={styles.g_text}>{value}</span>
+      render: (value, row, index) => {
+        const obj = {
+          children: <span className={styles.g_text}>{value}</span>,
+          props: {}
+        };
+        if(row.childId === 1){
+          obj.props.rowSpan = 2;
+          return obj
+        } else if(row.childId !== 1){
+          obj.props.rowSpan = 0;
+          return obj
+        } else if('length'in row) {
+          obj.props.rowSpan = row.length;
+          return obj;
+        } else {
+          return obj
+        }
       }
     }, {
       title: '数量',
@@ -79,7 +93,7 @@ const OrderDetail = () => {
       ellipsis: true,
       render: (value, row, index) => (
         <div>
-          {/* {(row.typeId === 300) && (index === 1)
+           {(row.typeId === 4) && (row.childId === 1)
             ? (
               <div style={{
                 float: "right"
@@ -89,7 +103,7 @@ const OrderDetail = () => {
                 </Link>
               </div>
             )
-            : ""} */}
+            : ""} 
           <span>
             <span
               style={{
@@ -110,19 +124,41 @@ const OrderDetail = () => {
   useEffect(() => {
     const fetchData = async() => {
       const rawData = await getProductList({id:match.params.styleId});
-      const typeIdArr = rawData.filter(record=>record.typeId ===400);
-      const typeId_firstIndex = rawData.findIndex(value=>value.typeId===400);
 
-      const newData = rawData.map((item,index) => {
-        if(index===typeId_firstIndex){
-          item.length = typeIdArr.length
-        }
-        return {
-          ...item,
-          totalPrice: item.price * item.number
+      rawData.forEach((item,index)=>{
+        if(item.typeId===4&&item.childId===1){
+             const arr =  rawData.filter(value=>value.typeId===4);
+             item.length = arr.length
+             arr.forEach(elem=>{
+                item.number += elem.number;
+                item.totalPrice += elem.price * elem.number
+              })
+        }else if(item.typeId===5&&item.childId===1){
+              const arr =  rawData.filter(value=>value.typeId===5)
+              item.length = arr.length
+              arr.forEach(elem=>{
+                item.number += elem.number;
+                item.totalPrice += elem.price * elem.number
+              })
+        }else if(item.typeId===7&&item.childId===1){
+              const arr =  rawData.filter(value=>value.typeId===7)
+              item.length = arr.length
+              arr.forEach(elem=>{
+                item.number += elem.number;
+                item.totalPrice += elem.price * elem.number
+              })
+        }else if(item.typeId===9&&item.childId===1){
+              const arr =  rawData.filter(value=>value.typeId===9)
+              arr.forEach(elem=>{
+                item.number += elem.number;
+                item.totalPrice += elem.price * elem.number
+              })
+              item.length = arr.length
+              
         }
       })
-      setTableData(newData);
+
+      setTableData(rawData);
     }
     fetchData();
 

@@ -13,7 +13,7 @@ const Order = () => {
   const match = useRouteMatch();
   const [mode,
     setMode] = useState('left');
-  const [roomArray] = useState([{typeId:1001,name:'A户型'}, {typeId:1002,name:'B2户型'}, {typeId:1003,name:'C1户型'},{typeId:1004,name:'C2户型'},{typeId:1005,name:'E户型'}]);
+  const [roomArray] = useState([{typeId:10,name:'A户型'}, {typeId:22,name:'B2户型'}, {typeId:31,name:'C1户型'},{typeId:32,name:'C2户型'},{typeId:50,name:'E户型'}]);
   return (
     <Switch>
       <Route path={`${match.path}/:styleId`}>
