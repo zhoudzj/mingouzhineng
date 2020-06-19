@@ -1,19 +1,24 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import {Switch, Route, Link, useRouteMatch} from 'react-router-dom'
+import {Switch, Route, Link, useRouteMatch,useHistory} from 'react-router-dom'
 import {Table, Button, Typography} from 'antd';
 import HouseHeader from "../components/HouseHeader";
 import styles from "../assets/css/order_detail.css";
 import DeviceDetail from "./DeviceDetail";
-import {getProductList} from '../config/api'
+import {getProductList} from '../config/api';
+import errorImg from '../assets/img/inner.jpg'
+
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
 const {Text} = Typography;
 
 const OrderDetail = () => {
   const match = useRouteMatch();
+  const history = useHistory();
   const [tableData,
     setTableData] = useState([])
-
+  const changeGroup = ()=>{
+    history.push('')
+  }
   const columns = [
     {
       title: '设备名称',
@@ -26,17 +31,11 @@ const OrderDetail = () => {
           children: value,
           props: {}
         };
-        if (row.childId === 1) {
-          obj.props.rowSpan = 2;
-          return obj;
-        } else if(row.childId !== 1){
-          obj.props.rowSpan = 0;
-          return obj;
-        } else if('length'in row) {
+        if('length'in row) {
           obj.props.rowSpan = row.length;
           return obj;
         } else {
-          obj.props.rowSpan = 1;
+          obj.props.rowSpan = 0;
           return obj
         }
       }
@@ -47,19 +46,14 @@ const OrderDetail = () => {
       ellipsis: true,
       render: (value, row, index) => {
         const obj = {
-          children: <img className={styles.g_img} src={pictureDomian+value}/>,
+          children: value ?<img className={styles.g_img} src={pictureDomian+value}/>:<img className={styles.g_img} src={errorImg}/>,
           props: {}
         };
-        if(row.childId === 1){
-          obj.props.rowSpan = 2;
-          return obj
-        } else if(row.childId !== 1){
-          obj.props.rowSpan = 0;
-          return obj
-        } else if('length'in row) {
+        if('length'in row) {
           obj.props.rowSpan = row.length;
           return obj;
         } else {
+          obj.props.rowSpan = 0;
           return obj
         }
       }
@@ -73,16 +67,11 @@ const OrderDetail = () => {
           children: <span className={styles.g_text}>{value}</span>,
           props: {}
         };
-        if(row.childId === 1){
-          obj.props.rowSpan = 2;
-          return obj
-        } else if(row.childId !== 1){
-          obj.props.rowSpan = 0;
-          return obj
-        } else if('length'in row) {
+        if('length'in row) {
           obj.props.rowSpan = row.length;
           return obj;
         } else {
+          obj.props.rowSpan = 0;
           return obj
         }
       }
@@ -91,73 +80,73 @@ const OrderDetail = () => {
       dataIndex: 'number',
       width: '250px',
       ellipsis: true,
-      render: (value, row, index) => (
-        <div>
+      render: (value, row, index) => {
+        const obj = {
+          children: (<div>
            {(row.typeId === 4) && (row.childId === 1)
             ? (
               <div style={{
                 float: "right"
               }}>
                 <Link to={`${match.url}/device:${row.typeId}`}>
-                  <Button>更改</Button>
+                  <Button onClick={changeGroup}>更改</Button>
                 </Link>
               </div>
             )
-            : ""} 
+            : ""}
           <span>
             <span
               style={{
               textAlign: 'center',
               margin: '10px'
-            }}>{value}</span>
+            }}>{row.totalNumber}</span>
           </span>
           <span
             style={{
             marginLeft: '20px',
             color: 'red'
           }}>{`￥${row.totalPrice}`}</span>
-        </div>
-      )
+        </div>),
+          props:{}
+        };
+        if('length'in row) {
+          obj.props.rowSpan = row.length;
+          return obj;
+        } else {
+          obj.props.rowSpan = 0;
+          return obj
+        }        
+      }
     }
   ];
- 
+  
   useEffect(() => {
+    const handdleRawItem = (typeId,rawData,item)=>{
+            const arr =  rawData.filter(value=>value.typeId===typeId);
+             item.length = arr.length;
+             item.totalNumber = 0;
+             item.totalPrice = 0;
+             arr.forEach(elem => {
+                item.totalNumber += elem.number;
+                item.totalPrice += (elem.price * elem.number)
+              })
+    };
+
     const fetchData = async() => {
       const rawData = await getProductList({id:match.params.styleId});
-
-      rawData.forEach((item,index)=>{
-        if(item.typeId===4&&item.childId===1){
-             const arr =  rawData.filter(value=>value.typeId===4);
-             item.length = arr.length
-             arr.forEach(elem=>{
-                item.number += elem.number;
-                item.totalPrice += elem.price * elem.number
-              })
+      rawData.forEach(item => {
+        if(item.typeId===3&&item.childId===1){
+             handdleRawItem(3,rawData,item);
+        }else if(item.typeId===4&&item.childId===1){
+             handdleRawItem(4,rawData,item);
         }else if(item.typeId===5&&item.childId===1){
-              const arr =  rawData.filter(value=>value.typeId===5)
-              item.length = arr.length
-              arr.forEach(elem=>{
-                item.number += elem.number;
-                item.totalPrice += elem.price * elem.number
-              })
+             handdleRawItem(5,rawData,item);
         }else if(item.typeId===7&&item.childId===1){
-              const arr =  rawData.filter(value=>value.typeId===7)
-              item.length = arr.length
-              arr.forEach(elem=>{
-                item.number += elem.number;
-                item.totalPrice += elem.price * elem.number
-              })
+             handdleRawItem(7,rawData,item);
         }else if(item.typeId===9&&item.childId===1){
-              const arr =  rawData.filter(value=>value.typeId===9)
-              arr.forEach(elem=>{
-                item.number += elem.number;
-                item.totalPrice += elem.price * elem.number
-              })
-              item.length = arr.length
-              
+             handdleRawItem(9,rawData,item);
         }
       })
-
       setTableData(rawData);
     }
     fetchData();
@@ -181,9 +170,11 @@ const OrderDetail = () => {
           summary={(pageData) => {
           let totalCount = 0;
           pageData.forEach(({totalPrice}) => {
-            totalCount += totalPrice;
+            if(totalPrice)totalCount += totalPrice;
           });
-          return (<><tr><th></th><td></td><td></td><td>总价:<Text type="danger">￥{totalCount}</Text></td></tr></>)
+          return (<><tr><th></th><td></td><td></td><td>总价:<Text type="danger">￥{totalCount}</Text><Button style={{
+                float: "right"
+              }}>提交</Button></td></tr></>)
         }}/>
       </Route>
     </Switch>
