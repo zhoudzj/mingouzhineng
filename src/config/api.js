@@ -30,7 +30,7 @@ export const getProductList = (param) => {
     return axios.post(url,param)
 }
 
-export const getProductByGroup = (param) => {
+export const getProductByType = (param) => {
     const url = '/product/findByTypeId';
     return axios.post(url,param)
 }
