@@ -68,6 +68,10 @@ const Login = ({dispatch}) => {
     }
     useEffect(()=>{
         console.log("dengdengdeng");
+
+        return ()=>{
+      console.log('卸载od');
+    }
   },[]);
     return (
         <div id = "test" className={styles.Login}>
