@@ -1,25 +1,26 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import {Switch, Route, Link, useRouteMatch, useParams} from 'react-router-dom'
+import {Switch, Route, Link, useRouteMatch, useParams, useHistory} from 'react-router-dom'
 import {Table, Form, Button} from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
-import {getProductByGroup} from '@/config/api';
+import {getProductByType} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg'
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
-const DeviceDetail = () => {
+const DeviceDetail = ({changeTableData}) => {
     const match = useRouteMatch();
-
+    const history = useHistory();
   const [devName,
     setDevName] = useState('')
   const [tableData,
     setTableData] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);  
   let {typeId} = useParams();
 
   useEffect(() => {
     console.log(typeId);
     const fetchData = async() => {
-      const rawData = await getProductByGroup({typeId:Number(typeId)});
+      const rawData = await getProductByType({typeId:Number(typeId)});
       const handdleRawItem = (groupId,rawData,item)=>{
             const arr =  rawData.filter(value=>value.groupId===groupId);
             item.totalPrice = 0;
@@ -54,13 +55,24 @@ const DeviceDetail = () => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      const groupId = selectedRows[0].groupId;
+      const selectedData = tableData.filter((item)=>item.groupId === groupId)
+      setSelectedData(selectedData);
     },
     renderCell: (checked, record, index, originNode) => {
       if (index % 2 === 0) {
         return originNode
+      }else {
+        const obj = {props:{}};
+        obj.props.rowSpan = 0;
+        return obj
       }
-    }
+    },      
+  }
+
+  const haddleGoBack = ()=>{
+    changeTableData(selectedData)
+    history.goBack();
   }
   const columns = [
     {
@@ -132,14 +144,10 @@ const DeviceDetail = () => {
       }}
         columns={columns}
         dataSource={tableData}
-        summary={(pageData) => {
-          let totalCount = 0;
-          pageData.forEach(({totalPrice}) => {
-            if(totalPrice)totalCount += totalPrice;
-          });
+        summary={() => {
           return (<><tr><th></th><td></td><td></td><td><Button style={{
                 float: "right"
-              }}>确定</Button></td></tr></>)
+              }} onClick={haddleGoBack}>确定</Button></td></tr></>)
         }}
         />
     </div>

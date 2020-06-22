@@ -16,7 +16,15 @@ const OrderDetail = () => {
   const history = useHistory();
   const [count,setCount] = useState(0);
   const [tableData,
-    setTableData] = useState([])
+    setTableData] = useState([]);
+
+  const changeTableData = (optionalData) => {
+    const newData = tableData;
+    const findedIndex = newData.findIndex(e=>optionalData[0].typeId === e.typeId);
+    newData.splice(findedIndex,optionalData.length,...optionalData);
+    setTableData(newData)
+  }  
+
   const columns = [
     {
       title: '设备名称',
@@ -157,7 +165,7 @@ const OrderDetail = () => {
   return (
     <Switch>
       <Route path={`${match.path}/:typeId`}>
-        <DeviceDetail/>
+        <DeviceDetail changeTableData={changeTableData}/>
       </Route>
       <Route path={`${match.path}`} exact>
         <HouseHeader title={"选择推荐"}/>
