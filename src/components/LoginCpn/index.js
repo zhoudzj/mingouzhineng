@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Link} from 'react-router-dom'
-import styles from "../assets/scss/loginCpn.scss"
+import styles from "./index.scss"
 import {message, Input, Button, Tabs} from 'antd';
 import { UserOutlined, LockOutlined} from '@ant-design/icons';
 

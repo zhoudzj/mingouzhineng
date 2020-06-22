@@ -1,4 +1,4 @@
-import {CHANGE_NETWORK} from '../actions/global'
+import {CHANGE_NETWORK} from '@/store/actions/global'
 
 const initState = {
     network: true,

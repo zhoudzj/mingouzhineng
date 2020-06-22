@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styles from "../assets/css/combo.css";
+import styles from "@/assets/css/combo.css";
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
-import errorImg from '../assets/img/inner.jpg'
+import errorImg from '@/assets/img/inner.jpg'
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 const COMBO_DATA = [
 ];
@@ -14,7 +14,7 @@ const Combo = ({ getCombo, typeId }) => {
   const [loadImgArr, setLoadImgArr] = useState([]);
 
   useEffect(() => {
-
+    console.log(match);
     const loadImage = (src) => {
       return new Promise(function (resolve, reject) {
         let img = new Image();

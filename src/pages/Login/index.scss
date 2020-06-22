@@ -1,9 +1,9 @@
-@import "common";
+@import "@/assets/scss/common";
 
 .Login {
     color: white!important;
     height: 100vh;
-    background-image: url(../img/boyDream_bg.jpeg);
+    background-image: url("../../assets/img/boyDream_bg.jpeg");
     background-size: 100% 100%;
     // background-position: center center;
     background-repeat: no-repeat;

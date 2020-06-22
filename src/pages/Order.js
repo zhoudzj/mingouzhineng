@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom'
 import {Tabs, Radio} from 'antd';
-import styles from "../assets/css/order.css";
-import Combo from "../components/Combo";
-import OrderDetail from "./OrderDetail"
-import HouseHeader from "../components/HouseHeader"
-import {getCombo} from '../config/api'
+import styles from "@/assets/css/order.css";
+import Combo from "@/components/Combo";
+import OrderDetail from "./OrderDetail/"
+import HouseHeader from "@/components/HouseHeader"
+import {getCombo} from '@/config/api'
 
 const {TabPane} = Tabs;
 
@@ -14,12 +14,15 @@ const Order = () => {
   const [mode,
     setMode] = useState('left');
   const [roomArray] = useState([{typeId:10,name:'A户型'}, {typeId:22,name:'B2户型'}, {typeId:31,name:'C1户型'},{typeId:32,name:'C2户型'},{typeId:50,name:'E户型'}]);
+  useEffect(()=>{
+  },[]);
+  
   return (
     <Switch>
-      <Route path={`${match.path}/:styleId`}>
+      <Route path={`${match.path}/:styleId`} >
         <OrderDetail/>
       </Route>
-      <Route path={`${match.path}`}>
+      <Route path={`${match.path}`} exact>
         <HouseHeader title={"智能选装"}/>
         <div className={styles.order_wrap}>
           <div className={styles.table_wrap}>

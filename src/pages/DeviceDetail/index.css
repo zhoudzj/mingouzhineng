@@ -1,9 +1,9 @@
-.img_wrap {
-  width:80px;
-  height:80px
+.g_img {
+  width:100%;
 }
 
 .text_wrap {
+  display: inline-block;
   width:400px;
   white-space:pre-line
 }

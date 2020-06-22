@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useReducer }  from 'react';
 import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
-import Header from '../components/Header';
-import House from '../components/House'
+import Header from '@/components/Header';
+import House from '@/components/House'
 import SelectItem from './SelectItem'
-import styles from "../assets/css/home.css"
+import styles from "@/assets/css/home.css"
 
-const HouseInfos = [{ url: require('../assets/img/lanseqianjiang.png'), title: '春月锦庐' }]
+const HouseInfos = [{ url: require('@/assets/img/lanseqianjiang.png'), title: '春月锦庐' }]
 
 const initialState = {
   headerTitle: '项目名称',
@@ -38,10 +38,10 @@ const Home = () => {
 
     return (
         <Switch>
-            <Route path={`${match.path}/:houseId`}>
+            <Route path={`${match.path}/:houseId`} >
                 <SelectItem />
             </Route>
-            <Route path={match.path}>
+            <Route path={match.path} >
             <Header text={headerTitle} />
             <div className={styles.g_house_wrap}>
                 {

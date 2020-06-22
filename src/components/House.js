@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Link} from 'react-router-dom'
-import styles from "../assets/css/house.css"
+import styles from "@/assets/css/house.css"
 
 const House = ({url, title, houseId}) => {
     return (

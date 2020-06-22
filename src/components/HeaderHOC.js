@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {useHistory, withRouter} from 'react-router-dom'
 import {ReactDOM} from 'react-router-dom'
-import styles from '../assets/css/header_hoc.css'
+import styles from '@/assets/css/header_hoc.css'
 import {Modal} from 'antd';
 import {connect} from 'react-redux';
-import {loginOut} from '../config/api'
+import {loginOut} from '@/config/api'
 
 const { confirm } = Modal;
 

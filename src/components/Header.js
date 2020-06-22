@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../assets/css/header.css"
+import styles from "@/assets/css/header.css"
 import HeaderHOC from './HeaderHOC'
 
 const Header = (props) => {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd';
-import store from '../store';
-import history from '../history'
+import store from '@/store';
+import history from '@/history'
 
 // 创建axios实例
 const instance = axios.create({ timeout: 1000 * 12 });

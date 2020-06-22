@@ -2,8 +2,8 @@ import React,{ useState, useEffect, useReducer }  from 'react';
 import { Switch, Route, Link, useRouteMatch, useHistory,useParams } from 'react-router-dom'
 import Order from './Order'
 import Shop from './Shop'
-import styles from "../assets/css/selectItem.css"
-import HouseHeader from "../components/HouseHeader"
+import styles from "@/assets/css/selectItem.css"
+import HouseHeader from "@/components/HouseHeader"
 const SelectItem = ({}) => {
 
     const match = useRouteMatch();
@@ -35,13 +35,13 @@ const SelectItem = ({}) => {
                 <div className={styles.g_items}>
                 <Link to={`${match.url}/order`}>
                     <div className={styles.img_wrap}>
-                        <img className={styles.g_image} src={require('../assets/img/my_shop.png')} />
+                        <img className={styles.g_image} src={require('@/assets/img/my_shop.png')} />
                         <span className={styles.c_font}>智能选装</span>
                     </div>
                 </Link>
                 <Link to={`${match.url}/shop`}>
                     <div className={styles.img_wrap}>
-                        <img className={styles.g_image} src={require('../assets/img/my_order.png')} />
+                        <img className={styles.g_image} src={require('@/assets/img/my_order.png')} />
                         <span className={styles.c_font}>我的选装</span>
                     </div>
                 </Link>

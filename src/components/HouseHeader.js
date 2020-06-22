@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../assets/css/house_header.css"
+import styles from "@/assets/css/house_header.css"
 import { useHistory } from 'react-router-dom'
 import HeaderHOC from './HeaderHOC'
 

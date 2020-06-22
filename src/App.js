@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styles from './App.css';
 import Home from './pages/Home';
-import Login from './pages/Login';
+import Login from './pages/Login/';
 import { Switch, Route, Redirect,Link,useHistory } from 'react-router-dom'
 import {connect} from 'react-redux';
 import NetworkReconnect from './components/NetworkReconnect';

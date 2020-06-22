@@ -1,4 +1,4 @@
-import {ADD_TOKEN,SET_USERINFO,REMOVE_TOKEN} from '../actions/user'
+import {ADD_TOKEN,SET_USERINFO,REMOVE_TOKEN} from '@/store/actions/user'
 let userInfo_store = localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):null;
 let token_store = localStorage.getItem('token')?localStorage.getItem('token'):'';
 const initState = {

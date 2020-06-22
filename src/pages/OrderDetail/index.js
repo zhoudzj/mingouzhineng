@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch,useHistory} from 'react-router-dom'
 import {Table, Button, Typography} from 'antd';
-import HouseHeader from "../components/HouseHeader";
-import styles from "../assets/css/order_detail.css";
-import DeviceDetail from "./DeviceDetail";
-import {getProductList} from '../config/api';
-import errorImg from '../assets/img/inner.jpg'
+import HouseHeader from "@/components/HouseHeader";
+import styles from "./index.css";
+import DeviceDetail from "@pages/DeviceDetail/";
+import {getProductList} from '@/config/api';
+import errorImg from '@/assets/img/inner.jpg'
 
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
@@ -14,16 +14,14 @@ const {Text} = Typography;
 const OrderDetail = () => {
   const match = useRouteMatch();
   const history = useHistory();
+  const [count,setCount] = useState(0);
   const [tableData,
     setTableData] = useState([])
-  const changeGroup = ()=>{
-    history.push('')
-  }
   const columns = [
     {
       title: '设备名称',
       dataIndex: 'type',
-      width: '150px',
+      width: '120px',
       // textWrap: 'word-break',
       ellipsis: true,
       render: (value, row, index) => {
@@ -42,7 +40,7 @@ const OrderDetail = () => {
     }, {
       title: '图片',
       dataIndex: 'img',
-      width: '150px',
+      width: '180px',
       ellipsis: true,
       render: (value, row, index) => {
         const obj = {
@@ -88,8 +86,8 @@ const OrderDetail = () => {
               <div style={{
                 float: "right"
               }}>
-                <Link to={`${match.url}/device:${row.typeId}`}>
-                  <Button onClick={changeGroup}>更改</Button>
+                <Link to={`${match.url}/${row.typeId}`}>
+                  <Button>更改</Button>
                 </Link>
               </div>
             )
@@ -121,6 +119,7 @@ const OrderDetail = () => {
   ];
   
   useEffect(() => {
+    console.log(match);
     const handdleRawItem = (typeId,rawData,item)=>{
             const arr =  rawData.filter(value=>value.typeId===typeId);
              item.length = arr.length;
@@ -150,18 +149,19 @@ const OrderDetail = () => {
       setTableData(rawData);
     }
     fetchData();
-
-  }, []);
+    return ()=>{
+      console.log('卸载od');
+    }
+  }, [count]);
 
   return (
     <Switch>
-      <Route path={`${match.path}/:deviceId`}>
+      <Route path={`${match.path}/:typeId`}>
         <DeviceDetail/>
       </Route>
-      <Route path={`${match.path}`}>
+      <Route path={`${match.path}`} exact>
         <HouseHeader title={"选择推荐"}/>
         <Table
-          rowKey="id"
           columns={columns}
           dataSource={tableData}
           rowKey='id'

@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Switch, Route, Link, useHistory} from 'react-router-dom';
-import styles from "../assets/scss/login.scss";
+import styles from "./index.scss";
 import {message, Input, Button, Tabs} from 'antd';
 import {connect} from 'react-redux';
-import {getLogin, getUserInfo, getRegister} from '../config/api';
+import {getLogin, getUserInfo, getRegister} from '@/config/api';
 import { UserOutlined, LockOutlined, LockFilled, PhoneFilled } from '@ant-design/icons';
-import LoginCpn from '../components/LoginCpn.js'
+import LoginCpn from '@/components/LoginCpn/'
 
 const {TabPane} = Tabs;
 
@@ -66,6 +66,9 @@ const Login = ({dispatch}) => {
     const onPasswordChange = e => {
         setPassword(e.target.value)
     }
+    useEffect(()=>{
+        console.log("dengdengdeng");
+  },[]);
     return (
         <div id = "test" className={styles.Login}>
             <header className={styles.Login_header}>一站式智能场景选装</header>
