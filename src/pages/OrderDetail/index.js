@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch,useHistory} from 'react-router-dom'
-import {Table, Button, Typography} from 'antd';
+import {Table, Button, Typography, Modal,List,Form} from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import DeviceDetail from "@pages/DeviceDetail/";
@@ -14,17 +14,26 @@ const {Text} = Typography;
 const OrderDetail = () => {
   const match = useRouteMatch();
   const history = useHistory();
-  const [count,setCount] = useState(0);
   const [tableData,
     setTableData] = useState([]);
+  const [visible,setVisible] = useState(false);
 
   const changeTableData = (optionalData) => {
     const newData = tableData;
     const findedIndex = newData.findIndex(e=>optionalData[0].typeId === e.typeId);
     newData.splice(findedIndex,optionalData.length,...optionalData);
     setTableData(newData)
-  }  
+  }
 
+  const preView = () => {
+    setVisible(true);
+  }
+  const handleOk = e => {
+    setVisible(false);
+  };
+  const handleCancel = e => {
+    setVisible(false);
+  };
   const columns = [
     {
       title: '设备名称',
@@ -160,7 +169,7 @@ const OrderDetail = () => {
     return ()=>{
       console.log('卸载od');
     }
-  }, [count]);
+  }, []);
 
   return (
     <Switch>
@@ -182,8 +191,11 @@ const OrderDetail = () => {
           });
           return (<><tr><th></th><td></td><td></td><td>总价:<Text type="danger">￥{totalCount}</Text><Button style={{
                 float: "right"
-              }}>提交</Button></td></tr></>)
+              }} onClick={preView}>提交</Button></td></tr></>)
         }}/>
+        <Modal title="订单预览" visible={visible} onOk={handleOk} onCancel={handleCancel}>
+          <List size="large" dataSource={tableData} renderItem={item => <div><List.Item>{item.name}</List.Item><List.Item>{item.price}</List.Item></div>}/>
+        </Modal>
       </Route>
     </Switch>
   )

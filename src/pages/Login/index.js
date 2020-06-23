@@ -67,10 +67,8 @@ const Login = ({dispatch}) => {
         setPassword(e.target.value)
     }
     useEffect(()=>{
-        console.log("dengdengdeng");
-
         return ()=>{
-      console.log('卸载od');
+      console.log('卸载login');
     }
   },[]);
     return (
