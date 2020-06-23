@@ -193,8 +193,8 @@ const OrderDetail = () => {
                 float: "right"
               }} onClick={preView}>提交</Button></td></tr></>)
         }}/>
-        <Modal title="订单预览" visible={visible} onOk={handleOk} onCancel={handleCancel}>
-          <List size="large" dataSource={tableData} renderItem={item => <div><List.Item>{item.name}</List.Item><List.Item>{item.price}</List.Item></div>}/>
+        <Modal width={800} title="订单预览" visible={visible} onOk={handleOk} onCancel={handleCancel}>
+          <List size="large" dataSource={tableData} renderItem={item => <List.Item key={item.id}><div>{item.name}</div><div>{`￥${item.price}数量${item.number}${item.unit}`}</div></List.Item>}/>
         </Modal>
       </Route>
     </Switch>
