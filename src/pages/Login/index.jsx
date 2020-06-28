@@ -67,7 +67,9 @@ const Login = ({dispatch}) => {
         setPassword(e.target.value)
     }
     useEffect(()=>{
-        console.log("dengdengdeng");
+        return ()=>{
+      console.log('卸载login');
+    }
   },[]);
     return (
         <div id = "test" className={styles.Login}>
