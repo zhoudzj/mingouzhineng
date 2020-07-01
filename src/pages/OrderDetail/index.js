@@ -18,6 +18,21 @@ const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
 const {Text} = Typography;
 
+const PANEL_STANDARD_GROUPID = 1;
+const PANEL_COLOR_GROUPID = 2;
+const PANEL_RISHUN_GROUPID = 3;
+
+const PANEL_KEY_CHILD = 1;
+const PANEL_AIRCTL_CHILD = 2;
+
+const PANEL_KEY_STANDARD_PRICE = 159;
+const PANEL_KEY_COLOR_PRICE = 1180;
+const PANEL_KEY_RISHUN_PRICE = 680;
+
+const PANEL_AIRCTL_STANDARD_PRICE = 399;
+const PANEL_AIRCTL_COLOR_PRICE = 1580;
+const PANEL_AIRCTL_RISHUN_PRICE = 1780;
+
 const OrderDetail = () => {
   const match = useRouteMatch();
   const history = useHistory();
@@ -26,27 +41,87 @@ const OrderDetail = () => {
   const [visible,
     setVisible] = useState(false);
 
-  const changeTableData = (optionalData) => {
-    const newData = tableData;
-    const selectedArr = newData.filter(value => value.typeId === optionalData[0].typeId);
+ const get_panel_key = (groupId) => {
+    if(groupId === PANEL_STANDARD_GROUPID){
+      return PANEL_KEY_STANDARD_PRICE
+    }else if(groupId === PANEL_COLOR_GROUPID){
+      return PANEL_KEY_COLOR_PRICE
+    }else if(groupId === PANEL_RISHUN_GROUPID){
+      return PANEL_KEY_RISHUN_PRICE
+    }
+ }
+
+ const get_panel_airctl = (groupId) => {
+   if(groupId === PANEL_STANDARD_GROUPID){
+      return PANEL_AIRCTL_STANDARD_PRICE
+    }else if(groupId === PANEL_COLOR_GROUPID){
+      return PANEL_AIRCTL_COLOR_PRICE
+    }else if(groupId === PANEL_RISHUN_GROUPID){
+      return PANEL_AIRCTL_RISHUN_PRICE
+    }
+ }
+ 
+ const get_panel_sum = (typeArr) => {
+   let sum = 0;
+   typeArr.forEach(item=>{
+     if(item.childId ===PANEL_KEY_CHILD){
+      sum += item.number * get_panel_key(item.groupId)
+     }else if (item.childId ===PANEL_AIRCTL_CHILD){
+      sum += item.number * get_panel_airctl(item.groupId)
+     }  
+   })
+  return sum
+ }
+
+  const changeTableData = (optionalData,associationData) => {
+    console.log(associationData);
+    const rawData = tableData;
+    const selectedArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
+    const socketArr = rawData.filter(value => value.typeId === 5);
+
+    associationData[0].totalNumber = 0;
+    associationData[0].totalPrice = 0;
+    associationData[0].length = associationData.length;
+    associationData.forEach(i=>{
+      socketArr.forEach(elem => {
+        if (i.childId === elem.childId) {
+          i.number = elem.number
+        }
+      })
+      associationData[0].totalNumber += i.number;
+      associationData[0].totalPrice += i.number * Number(i.price);
+    })
+
+    optionalData[0].totalNumber = 0;
     optionalData.forEach(i => {
       selectedArr.forEach(elem => {
         if (i.childId === elem.childId) {
           i.number = elem.number
         }
       })
-    });
-    optionalData[0].totalNumber = 0;
-    optionalData[0].totalPrice = 0;
-    optionalData.forEach(i=>{
       optionalData[0].totalNumber += i.number;
       optionalData[0].totalPrice += i.number * Number(i.price);
-    })
-    console.log('1', optionalData);
-    const findedIndex = newData.findIndex(e => optionalData[0].typeId === e.typeId);
-    newData.splice(findedIndex, optionalData.length, ...optionalData);
-    console.log('2', newData);
-    setTableData(newData)
+    });
+
+
+    // const sum = get_panel_sum(optionalData);
+
+    // optionalData[0].totalPrice = sum;
+    // optionalData.forEach(i=>{
+      
+    // })
+    // associationData.forEach(i=>{
+    //   associationData[0].totalNumber += i.number;
+    //   associationData[0].totalPrice += i.number * Number(i.price);
+    // })
+    // console.log('1', optionalData);
+    const findedIndex = rawData.findIndex(e => optionalData[0].typeId === e.typeId);
+    rawData.splice(findedIndex, optionalData.length, ...optionalData);
+
+    const findedAssoIndex = rawData.findIndex(e => associationData[0].typeId === e.typeId);
+    rawData.splice(findedAssoIndex, associationData.length, ...associationData);
+    console.log('2', rawData);
+    setTableData(rawData)
   };
 
   const preView = () => {
@@ -164,7 +239,6 @@ const OrderDetail = () => {
   ];
 
   useEffect(() => {
-    console.log(match);
     const handdleRawItem = (typeId, rawData, item) => {
       const arr = rawData.filter(value => value.typeId === typeId);
       item.length = arr.length;

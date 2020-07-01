@@ -7,6 +7,9 @@ import {getProductByType} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg'
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
+const TYPEID_PANEL = 4;
+const TYPEID_SOCKET = 5;
+
 const DeviceDetail = ({changeTableData}) => {
     const match = useRouteMatch();
     const history = useHistory();
@@ -14,31 +17,38 @@ const DeviceDetail = ({changeTableData}) => {
     setDevName] = useState('')
   const [tableData,
     setTableData] = useState([]);
-  const [selectedData, setSelectedData] = useState([]);  
-  let {typeId} = useParams();
-
+  const [socketData,setSocketData] = useState([]);  
+  const [selectedData, setSelectedData] = useState([]);
+  const [selectedSockets,setSelectedSockets] = useState([]);
+  let {typeId,styleId,houseId} = useParams();
   useEffect(() => {
-    console.log(typeId);
     const fetchData = async() => {
-      const rawData = await getProductByType({typeId:Number(typeId)});
-      const handdleRawItem = (groupId,rawData,item)=>{
-            const arr =  rawData.filter(value=>value.groupId===groupId);
+        const typeIds = [Number(typeId)]
+        if(styleId.charAt(styleId.length-1)==='1'){
+          typeIds.push(TYPEID_SOCKET);
+        }
+      const rawData = await getProductByType({typeIds});
+      const pannelArr = rawData.filter(i=>i.typeId===TYPEID_PANEL);  
+      const socketArr = rawData.filter(i=>i.typeId===TYPEID_SOCKET);
+      const handdleRawItem = (groupId,pannelArr,item)=>{
+            const arr =  pannelArr.filter(value=>value.groupId===groupId);
             item.totalPrice = 0;
              item.length = arr.length;
              arr.forEach(elem => {
                 item.totalPrice += Number(elem.price);
               })
     };
-      rawData.forEach(item => {
+      pannelArr.forEach(item => {
         if(item.groupId===1&&item.childId===1){
-             handdleRawItem(1,rawData,item);
+             handdleRawItem(1,pannelArr,item);
         }else if(item.groupId===2&&item.childId===1){
-             handdleRawItem(2,rawData,item);
+             handdleRawItem(2,pannelArr,item);
         }else if(item.groupId===3&&item.childId===1){
-             handdleRawItem(3,rawData,item);
+             handdleRawItem(3,pannelArr,item);
         }
       })
-      setTableData(rawData);
+      setTableData(pannelArr);
+      setSocketData(socketArr)
     };
     fetchData();
 
@@ -56,8 +66,10 @@ const DeviceDetail = ({changeTableData}) => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       const groupId = selectedRows[0].groupId;
-      const selectedData = tableData.filter((item)=>item.groupId === groupId)
+      const selectedData = tableData.filter((item)=>item.groupId === groupId);
+      const selectedSockets = socketData.filter(item=>item.groupId === groupId);
       setSelectedData(selectedData);
+      setSelectedSockets(selectedSockets);
     },
     renderCell: (checked, record, index, originNode) => {
       if (index % 2 === 0) {
@@ -71,7 +83,7 @@ const DeviceDetail = ({changeTableData}) => {
   }
 
   const haddleGoBack = ()=>{
-    changeTableData(selectedData)
+    changeTableData(selectedData,selectedSockets);
     history.goBack();
   }
   const columns = [
