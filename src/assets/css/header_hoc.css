@@ -5,8 +5,10 @@
 
 .user {
     display: inline-block;
-    width:50px;
-    color: #61C7FF
+    width:200px;
+    color: #61C7FF;
+    text-align: right;
+    margin-right: 10px
 }
 
 .logout {

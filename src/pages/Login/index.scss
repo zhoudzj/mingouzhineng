@@ -31,6 +31,10 @@
           text-align: center
         }
     }
+    .card-container {
+      width:90%;
+      margin: auto
+    }
      .card-container > .ant-tabs-card .ant-tabs-content {
     margin: auto;
     position: relative;
@@ -41,12 +45,11 @@
     }
     @media screen and (min-width:640px) and (max-width: 1024px){
       width: 600px;
-      height: 550px;
+      height: 500px;
       padding: 20px 0 0;
     }
     @media screen and (max-width: 639px){
       height: 60vh;
-      margin: 50px 15vw 0;
     }
   }
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {

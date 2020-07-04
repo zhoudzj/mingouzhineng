@@ -21,7 +21,7 @@ const LoginComponent = ({onUserChange,onPasswordChange,onClick,btnText}) => {
       placeholder="请输入密码"
       prefix={< LockOutlined />}
       onChange={onPasswordChange}/>
-      </div>
+      </div>< br />< br />
       <button className = {styles.button_login} onClick={onClick}>{btnText}</button>
 
       <div className={styles.intro}>powered by Mingou</div>
