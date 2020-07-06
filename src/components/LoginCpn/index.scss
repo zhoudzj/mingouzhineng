@@ -19,15 +19,15 @@
       margin-left:-200px;
       left:50%;
       position: absolute;
-      bottom: 100px;
+      // bottom: 100px;
     }
     @media screen and (min-width:640px) and (max-width: 1024px){
       width: 400px;
       height: 50px;
-      margin-left:-200px;
-      left:50%;
-      position: absolute;
-      bottom: 30px;
+      // margin-left:-200px;
+      // left:50%;
+      // position: absolute;
+      // bottom: 30px;
     }
     @media screen and (max-width: 639px){
       width: 80%;
@@ -35,7 +35,7 @@
       margin-left:-50%;
       left:50%;
       position: absolute;
-      bottom: 30px;
+      // bottom: 30px;
       width:100%
     }
   }

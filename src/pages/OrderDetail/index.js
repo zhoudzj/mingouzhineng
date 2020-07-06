@@ -29,25 +29,6 @@ const OrderDetail = () => {
   const changeTableData = (optionalData, associationData) => {
     console.log(associationData);
     const rawData = tableData;
-    const selectedArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
-
-    optionalData[0].totalNumber = 0;
-    optionalData[0].totalPrice = 0;
-    optionalData.forEach(i => {
-      selectedArr.forEach(elem => {
-        if (i.childId === elem.childId) {
-          i.number = elem.number
-        }
-      })
-      if (!isNaN(i.number) && !isNaN(i.price)) {
-        optionalData[0].totalNumber += i.number;
-        optionalData[0].totalPrice += i.number * Number(i.price);
-      }
-    });
-
-    const findedIndex = rawData.findIndex(e => optionalData[0].typeId === e.typeId);
-    rawData.splice(findedIndex, selectedArr.length, ...optionalData);
-    
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);
       associationData[0].totalNumber = 0;
@@ -59,17 +40,33 @@ const OrderDetail = () => {
             i.number = elem.number
           }
         })
-        if (!isNaN(i.number) && !isNaN(i.price)) {
+        if(!isNaN(i.number)&&!isNaN(i.price)){
           associationData[0].totalNumber += i.number;
           associationData[0].totalPrice += i.number * Number(i.price);
         }
-      });
-
+      })
       const findedAssoIndex = rawData.findIndex(e => associationData[0].typeId === e.typeId);
       rawData.splice(findedAssoIndex, socketArr.length, ...associationData);
     }
+    const selectedArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
+    optionalData[0].totalNumber = 0;
+    optionalData[0].totalPrice = 0;
+    optionalData.forEach(i => {
+      selectedArr.forEach(elem => {
+        if (i.childId === elem.childId) {
+          i.number = elem.number
+        }
+      })
 
-    console.log('2', rawData);
+      if(!isNaN(i.number)&&!isNaN(i.price)){
+      optionalData[0].totalNumber += i.number;
+      optionalData[0].totalPrice += i.number * Number(i.price);
+      }
+    });
+
+    const findedIndex = rawData.findIndex(e => optionalData[0].typeId === e.typeId);
+    rawData.splice(findedIndex, selectedArr.length, ...optionalData);
+
     setTableData(rawData)
   };
 
@@ -240,9 +237,8 @@ const OrderDetail = () => {
               if (totalPrice)
                 totalCount += totalPrice;
             }
-            );
-            return (<><tr><th></th><td></td><td></td><td>总价 : <Text type="danger">￥{totalCount}</Text>< Button style={{ float: "right" }} onClick={preView}>提交</Button></td></tr></>)
-          }} />
+          );
+          return (<><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text>< Button style = {{ float: "right" }}onClick = {preView} > 提交 </Button></td></tr></>)}}/>
         <Modal
           width={800}
           title="订单预览"
