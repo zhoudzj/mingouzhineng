@@ -68,7 +68,6 @@ const Login = ({dispatch}) => {
     }
     useEffect(()=>{
         return ()=>{
-      console.log('卸载login');
     }
   },[]);
     return (
