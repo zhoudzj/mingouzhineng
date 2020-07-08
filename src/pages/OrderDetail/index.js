@@ -6,43 +6,35 @@ import {
   Typography,
   Modal,
   List,
-  Form
+  Form,
+  Pagination,
+  Input
 } from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import DeviceDetail from "@pages/DeviceDetail/";
-import {getProductList} from '@/config/api';
-import errorImg from '@/assets/img/inner.jpg'
+import {getProductList,getDefaultProductList} from '@/config/api';
+import errorImg from '@/assets/img/inner.jpg';
 
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
 const {Text} = Typography;
 
-const PANEL_STANDARD_GROUPID = 1;
-const PANEL_COLOR_GROUPID = 2;
-const PANEL_RISHUN_GROUPID = 3;
-
-const PANEL_KEY_CHILD = 1;
-const PANEL_AIRCTL_CHILD = 2;
-
-const PANEL_KEY_STANDARD_PRICE = 159;
-const PANEL_KEY_COLOR_PRICE = 1180;
-const PANEL_KEY_RISHUN_PRICE = 680;
-
-const PANEL_AIRCTL_STANDARD_PRICE = 399;
-const PANEL_AIRCTL_COLOR_PRICE = 1580;
-const PANEL_AIRCTL_RISHUN_PRICE = 1780;
+const PRODUCT_MACHINE_TYPEID = 1;
+const PRODUCT_MODLE_TYPEID = 2;
+const PRODUCT_PANEL_TYPEID = 4;
+const PRODUCT_SOCKET_TYPEID = 5;
 
 const OrderDetail = () => {
   const match = useRouteMatch();
   const history = useHistory();
   const [tableData,
     setTableData] = useState([]);
+  const [previewList,setPreviewList] = useState([]); 
   const [visible,
     setVisible] = useState(false);
-
+  const [current,setCurrent] = useState(1);
   const changeTableData = (optionalData, associationData) => {
-    console.log(associationData);
     const rawData = tableData;
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);
@@ -84,7 +76,26 @@ const OrderDetail = () => {
     setTableData(rawData)
   };
 
-  const preView = () => {
+  const getColor = (index) => {
+    if(index===1){
+      return '雪花银'
+    }else if(index===2){
+      return '香槟金'
+    }else if(index===3){
+      return '云母黑'
+    }
+  }
+  const onPageChange = page => {
+    console.log(page);
+    setCurrent(page)
+  }
+  const preView = async () => {
+    const data = await getDefaultProductList({id: match.params.styleId});
+    if(data&&data.length>0){
+        const topArr = data.filter(e => (e.typeId === PRODUCT_MACHINE_TYPEID||e.typeId === PRODUCT_MODLE_TYPEID));
+        const otherArr = data.filter(e => (e.typeId !== PRODUCT_MACHINE_TYPEID&&e.typeId !== PRODUCT_MODLE_TYPEID));
+        setPreviewList([...topArr,...tableData,...otherArr]);
+    }
     setVisible(true);
   };
   const handleOk = e => {
@@ -119,9 +130,15 @@ const OrderDetail = () => {
       width: '180px',
       ellipsis: true,
       render: (value, row, index) => {
+        let pictureUrl = '';
+        if(row.typeId===PRODUCT_PANEL_TYPEID||row.typeId===PRODUCT_SOCKET_TYPEID){
+          pictureUrl = pictureDomian + value+'/'+ row.color +'.png';
+        } else {
+          pictureUrl = pictureDomian + value;
+        }
         const obj = {
           children: value
-            ? <img className={styles.g_img} src={pictureDomian + value}/>
+            ? <img className={styles.g_img} src={pictureUrl}/>
             : <img className={styles.g_img} src={errorImg}/>,
           props: {}
         };
@@ -228,7 +245,6 @@ const OrderDetail = () => {
     }
     fetchData();
     return () => {
-      console.log('卸载od');
     }
   }, []);
 
@@ -252,22 +268,56 @@ const OrderDetail = () => {
               totalCount += totalPrice;
             }
           );
-          return ( <>< tr > <th></th> < td > </td> < td > </td> < td > 总价 : <Text type="danger">￥{totalCount}</Text> < Button style = {{ float: "right" }}onClick = {
+          return ( <><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text> < Button style = {{ float: "right" }}onClick = {
             preView
-          } > 提交 < /Button></td > </tr> < />) }}/>
+          } > 提交 < /Button></td></tr></>) }}/>
         <Modal
           width={800}
           title="订单预览"
           visible={visible}
-          onOk={handleOk}
-          onCancel={handleCancel}>
+          onCancel={handleCancel}
+          footer={current===2?<Button key='submit' type="primary" onClick={handleOk}>提交</Button>:null}
+          >
+          {current===1?
           <List
             size="large"
-            dataSource={tableData}
+            dataSource={previewList}
             renderItem={item => <List.Item key={item.id}>
-            <div>{item.name}</div>
-            <div>{`￥${item.price}数量${item.number}${item.unit}`}</div>
-          </List.Item>}/>
+            <div className = {styles.g_item_name}>{item.name}</div>
+            <div className = {styles.g_item_item}>{getColor(item.color)}</div>
+            <div className = {styles.g_item_item}>{`￥${item.price}`}</div>
+            <div className = {styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
+          </List.Item>}/>:null}
+          <div>{current===2?
+          (<Form>
+            <Form.Item
+            label="项目名称"
+            name="项目名称">
+              <Input />
+            </Form.Item>
+            <Form.Item
+            label="户型"
+            name="户型">
+              <Input />
+            </Form.Item>
+            <Form.Item
+            label="房号"
+            name="房号">
+              <Input />
+            </Form.Item>
+            <Form.Item
+            label="销售姓名"
+            name="销售姓名">
+              <Input />
+            </Form.Item>
+            <Form.Item
+            label="姓名"
+            name="姓名">
+              <Input />
+            </Form.Item>
+          </Form>):null}
+          </div>
+          <Pagination simple defaultCurrent={1} defaultPageSize={1} onChange={onPageChange} total={2} />
         </Modal>
       </Route>
     </Switch>

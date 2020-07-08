@@ -7,3 +7,11 @@
   width: 300px;
   white-space: pre-line;
 }
+
+.g_item_name {
+  width: 250px
+}
+
+.g_item_item {
+  width: 60px
+}

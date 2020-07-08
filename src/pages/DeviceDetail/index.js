@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch, useParams, useHistory} from 'react-router-dom'
-import {Table, Form, Button} from 'antd';
+import {Table, Form, Button,Select,message} from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import {getProductByType} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg'
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
+
+const { Option } = Select;
 
 const TYPEID_PANEL = 4;
 const TYPEID_SOCKET = 5;
@@ -21,6 +23,7 @@ const DeviceDetail = ({changeTableData}) => {
   const [selectedData, setSelectedData] = useState([]);
   const [selectedSockets,setSelectedSockets] = useState([]);
   let {typeId,styleId,houseId} = useParams();
+
   useEffect(() => {
     const fetchData = async() => {
         const typeIds = [Number(typeId)]
@@ -81,8 +84,22 @@ const DeviceDetail = ({changeTableData}) => {
       }
     },      
   }
-
+  const handleChange = (row,e)=>{
+    row.color = e;
+    tableData.forEach(item=>{
+      if(item.groupId===row.groupId){
+        item.color = row.color
+      }
+    })
+  }
   const haddleGoBack = ()=>{
+    if(selectedData.length===0||selectedSockets.length===0){
+      message.error({
+        content: '请选择一项',
+        duration: 1.5,
+    })
+      return
+    }
     changeTableData(selectedData,selectedSockets);
     history.goBack();
   }
@@ -124,6 +141,29 @@ const DeviceDetail = ({changeTableData}) => {
         }
       }
     }, {
+      title: '颜色',
+      dataIndex: 'color',
+      width:'200px',
+      ellipsis: true,
+      render: (text, row, index) => {
+        const obj = {
+          children: <Select defaultValue={2} style={{ width: 120 }} onChange={handleChange.bind(this,row)}>
+            <Option value={1}>香槟金</Option>
+            <Option value={2}>雪花银</Option>
+            <Option value={3}>云母黑</Option>
+            <Option value={4}>暖白</Option>
+          </Select>,
+          props: {}
+        };
+        if('length'in row) {
+          obj.props.rowSpan = row.length;
+          return obj;
+        } else {
+          obj.props.rowSpan = 0;
+          return obj
+        }
+      }
+    },{
       title: '单价',
       dataIndex: 'price',
       width:'200px',

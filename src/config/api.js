@@ -34,4 +34,19 @@ export const getProductByType = (param) => {
     const url = '/product/findByTypeId';
     return axios.post(url,param)
 }
+//获取默认产品列表
+export const getDefaultProductList = (param) => {
+    const url = '/product/defaultList';
+    return axios.post(url,param)
+}
+//生成订单
+export const createOrder = (param) => {
+    const url = '/order/create';
+    return axios.post(url,param)
+}
+//生成pdf
+export const createPdf = (param) => {
+    const url = '/order/createPdf';
+    return axios.post(url,param)
+}
 
