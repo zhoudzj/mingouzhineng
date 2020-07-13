@@ -35,6 +35,7 @@ const OrderDetail = () => {
     setVisible] = useState(false);
   const [current,setCurrent] = useState(1);
   const changeTableData = (optionalData, associationData) => {
+    console.log(associationData);
     const rawData = tableData;
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useReducer }  from 'react';
 import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 import Header from '@/components/Header';
 import House from '@/components/House'
-import SelectItem from './SelectItem'
 import styles from "@/assets/css/home.css"
+import Order from '@pages/Order'
 
 const HouseInfos = [{ url: require('@/assets/img/lanseqianjiang.png'), title: '春月锦庐' }]
 
@@ -39,7 +39,7 @@ const Home = () => {
     return (
         <Switch>
             <Route path={`${match.path}/:houseId`} >
-                <SelectItem />
+                <Order communityId={1}/>
             </Route>
             <Route path={match.path} >
             <Header text={headerTitle} />

@@ -4,13 +4,13 @@ import {Table, Form, Button,Select,message} from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import {getProductByType} from '@/config/api';
-import errorImg from '@/assets/img/inner.jpg'
+import errorImg from '@/assets/img/inner.jpg';
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
 const { Option } = Select;
 
-const TYPEID_PANEL = 4;
-const TYPEID_SOCKET = 5;
+const PRODUCT_PANEL_TYPEID = 4;
+const PRODUCT_SOCKET_TYPEID = 5;
 
 const DeviceDetail = ({changeTableData}) => {
     const match = useRouteMatch();
@@ -28,11 +28,11 @@ const DeviceDetail = ({changeTableData}) => {
     const fetchData = async() => {
         const typeIds = [Number(typeId)]
         if(styleId.charAt(styleId.length-1)==='1'){
-          typeIds.push(TYPEID_SOCKET);
+          typeIds.push(PRODUCT_SOCKET_TYPEID);
         }
       const rawData = await getProductByType({typeIds});
-      const pannelArr = rawData.filter(i=>i.typeId===TYPEID_PANEL);  
-      const socketArr = rawData.filter(i=>i.typeId===TYPEID_SOCKET);
+      const pannelArr = rawData.filter(i=>i.typeId===PRODUCT_PANEL_TYPEID);  
+      const socketArr = rawData.filter(i=>i.typeId===PRODUCT_SOCKET_TYPEID);
       const handdleRawItem = (groupId,pannelArr,item)=>{
             const arr =  pannelArr.filter(value=>value.groupId===groupId);
             item.totalPrice = 0;
@@ -71,10 +71,12 @@ const DeviceDetail = ({changeTableData}) => {
       const groupId = selectedRows[0].groupId;
       const selectedData = tableData.filter((item)=>item.groupId === groupId);
       const selectedSockets = socketData.filter(item=>item.groupId === groupId);
+      console.log(selectedSockets);
       setSelectedData(selectedData);
       setSelectedSockets(selectedSockets);
     },
     renderCell: (checked, record, index, originNode) => {
+      console.log(record)
       if (index % 2 === 0) {
         return originNode
       }else {
@@ -88,9 +90,16 @@ const DeviceDetail = ({changeTableData}) => {
     row.color = e;
     tableData.forEach(item=>{
       if(item.groupId===row.groupId){
-        item.color = row.color
+        item.color = row.color;
       }
     })
+    socketData.forEach(item=>{
+      if(item.groupId===row.groupId){
+        item.color = row.color;      
+      }
+    })
+    setTableData([...tableData]);
+    setSocketData([...socketData]);
   }
   const haddleGoBack = ()=>{
     if(selectedData.length===0||selectedSockets.length===0){
@@ -110,8 +119,14 @@ const DeviceDetail = ({changeTableData}) => {
       width:'180px',
       ellipsis: true,
       render: (value, row, index) => {
+        let pictureUrl = '';
+        if(row.typeId===PRODUCT_PANEL_TYPEID||row.typeId===PRODUCT_SOCKET_TYPEID){
+          pictureUrl = pictureDomian + value+'/'+ row.color +'.png';
+        } else {
+          pictureUrl = pictureDomian + value;
+        }
         const obj = {
-          children: value ?<img className={styles.g_img} src={pictureDomian+value}/>:<img className={styles.g_img} src={errorImg}/>,
+          children: value ?<img className={styles.g_img} src={pictureUrl}/>:<img className={styles.g_img} src={errorImg}/>,
           props: {}
         };
         if('length'in row) {
@@ -147,11 +162,10 @@ const DeviceDetail = ({changeTableData}) => {
       ellipsis: true,
       render: (text, row, index) => {
         const obj = {
-          children: <Select defaultValue={2} style={{ width: 120 }} onChange={handleChange.bind(this,row)}>
-            <Option value={1}>香槟金</Option>
-            <Option value={2}>雪花银</Option>
+          children: <Select defaultValue={1} style={{ width: 120 }} onChange={handleChange.bind(this,row)}>
+            <Option value={1}>雪花银</Option>
+            <Option value={2}>香槟金</Option>
             <Option value={3}>云母黑</Option>
-            <Option value={4}>暖白</Option>
           </Select>,
           props: {}
         };

@@ -19,6 +19,11 @@ export const loginOut = (param) => {
     const url = '/user/logout';
     return axios.post(url,param)
 }
+//获取户型列表
+export const getRoomList = (param) => {
+    const url = '/community/list';
+    return axios.post(url,param)
+}
 
 export const getCombo = (param) => {
     const url = '/style/findByTypeId';
