@@ -40,7 +40,7 @@ const DeviceDetail = ({changeTableData}) => {
              arr.forEach(elem => {
                 item.totalPrice += Number(elem.price);
               })
-    };
+      };
       pannelArr.forEach(item => {
         if(item.groupId===1&&item.childId===1){
              handdleRawItem(1,pannelArr,item);

@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useReducer} from 'react';
-import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom'
+import React, { useState, useEffect, useReducer } from 'react';
+import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 import {
   Table,
   Button,
@@ -65,6 +65,7 @@ const OrderDetail = () => {
           i.number = elem.number
         }
       })
+
       if(!isNaN(i.number)&&!isNaN(i.price)){
       optionalData[0].totalNumber += i.number;
       optionalData[0].totalPrice += i.number * Number(i.price);
@@ -192,15 +193,15 @@ const OrderDetail = () => {
               <span>
                 <span
                   style={{
-                  textAlign: 'center',
-                  margin: '10px'
-                }}>{row.totalNumber}</span>
+                    textAlign: 'center',
+                    margin: '10px'
+                  }}>{row.totalNumber}</span>
               </span>
               <span
                 style={{
-                marginLeft: '20px',
-                color: 'red'
-              }}>{`￥${row.totalPrice}`}</span>
+                  marginLeft: '20px',
+                  color: 'red'
+                }}>{`￥${row.totalPrice}`}</span>
             </div>
           ),
           props: {}
@@ -227,8 +228,8 @@ const OrderDetail = () => {
         item.totalPrice += (elem.price * elem.number)
       })
     };
-    const fetchData = async() => {
-      const rawData = await getProductList({id: match.params.styleId});
+    const fetchData = async () => {
+      const rawData = await getProductList({ id: match.params.styleId });
       rawData.forEach(item => {
         if (item.typeId === 3 && item.childId === 1) {
           handdleRawItem(3, rawData, item);
@@ -252,10 +253,10 @@ const OrderDetail = () => {
   return (
     <Switch>
       <Route path={`${match.path}/:typeId`}>
-        <DeviceDetail changeTableData={changeTableData}/>
+        <DeviceDetail changeTableData={changeTableData} />
       </Route>
       <Route path={`${match.path}`} exact>
-        <HouseHeader title={"选择推荐"}/>
+        <HouseHeader title={"选择推荐"} />
         <Table
           columns={columns}
           dataSource={tableData}
@@ -263,10 +264,10 @@ const OrderDetail = () => {
           pagination={false}
           bordered
           summary={(pageData) => {
-          let totalCount = 0;
-          pageData.forEach(({totalPrice}) => {
-            if (totalPrice) 
-              totalCount += totalPrice;
+            let totalCount = 0;
+            pageData.forEach(({ totalPrice }) => {
+              if (totalPrice)
+                totalCount += totalPrice;
             }
           );
           return ( <><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text> < Button style = {{ float: "right" }}onClick = {
