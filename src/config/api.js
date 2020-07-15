@@ -21,7 +21,7 @@ export const loginOut = (param) => {
 }
 //获取户型列表
 export const getRoomList = (param) => {
-    const url = '/community/list';
+    const url = '/house/list';
     return axios.post(url,param)
 }
 
