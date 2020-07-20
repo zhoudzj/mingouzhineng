@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 import {Tabs, Radio, Cascader} from 'antd';
 import styles from "./index.css";
 import Combo from "@/components/Combo";
@@ -13,8 +14,6 @@ const Order = ({communityId}) => {
   const match = useRouteMatch();
   const [options,
     setOptions] = useState([]);
-  const [rooms,
-    setRooms] = useState([]);
   const [roomData,setRoomData] = useState([]);
   useEffect(() => {
     const fetchData = async() => {
@@ -52,14 +51,13 @@ const Order = ({communityId}) => {
   }, []);
   const onChange = (value) => {
     setRoomData(value);
-    console.log(value);
   }
   return (
-    <Switch>
+    <CacheSwitch>
       <Route path={`${match.path}/:styleId`}>
         <OrderDetail/>
       </Route>
-      <Route path={`${match.path}`} exact>
+      <CacheRoute path={`${match.path}`} exact>
         <HouseHeader title={"智能选装"}/>
         <div className={styles.order_wrap}>
           <div className={styles.table_wrap}>
@@ -71,8 +69,8 @@ const Order = ({communityId}) => {
           <Combo getCombo={getCombo} roomData={roomData}/>
           </div>
         </div>
-      </Route>
-    </Switch>
+      </CacheRoute>
+    </CacheSwitch>
   )
 }
 

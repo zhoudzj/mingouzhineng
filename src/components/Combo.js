@@ -43,11 +43,12 @@ const Combo = ({ getCombo, roomData }) => {
       setComboData(data);
     }
 
-    fetchData().then(() => {
-    }).catch((e)=>{
-      console.log(e);
-    });
-
+    if (roomData.length > 0) {
+      fetchData().then(() => {
+      }).catch((e) => {
+        console.log(e);
+      });
+    }
   }, [roomData])
 
   return (
