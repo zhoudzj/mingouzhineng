@@ -1,34 +1,38 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styles from "@/assets/css/combo.css";
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import {Link, useRouteMatch, useHistory} from 'react-router-dom';
 import errorImg from '@/assets/img/inner.jpg'
-const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
-const COMBO_DATA = [
-];
+import {getCombo} from '@/config/api';
 
-const Combo = ({ getCombo, roomData }) => {
+const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
+const COMBO_DATA = [];
+
+const Combo = ({roomData}) => {
   const match = useRouteMatch();
 
   const [comboData,
     setComboData] = useState(COMBO_DATA);
-  const [loadImgArr, setLoadImgArr] = useState([]);
+  const [loadImgArr,
+    setLoadImgArr] = useState([]);
 
   useEffect(() => {
+    console.log(roomData);
     const loadImage = (src) => {
       return new Promise(function (resolve, reject) {
         let img = new Image();
-        img.onload = function () {//加载时执行resolve函数
+        img.onload = function () { //加载时执行resolve函数
           resolve(img);
         }
         img.onerror = function () {
           img.src = errorImg;
           resolve(img);
         }
+        console.log(src);
         img.src = src;
       })
     }
 
-    const fn = async (resData) => {
+    const fn = async(resData) => {
       let arr = [];
       for (let i = 0; i < resData.length; i++) {
         const img = await loadImage(pictureDomian + resData[i].img);
@@ -36,17 +40,17 @@ const Combo = ({ getCombo, roomData }) => {
       }
       return arr;
     }
-    const fetchData = async () => {
-      const data = await getCombo({ roomData });
+    const fetchData = async() => {
+      const data = await getCombo({roomData});
       const arr = await fn(data);
       setLoadImgArr(arr);
       setComboData(data);
     }
-
-    fetchData().then(() => {
-    }).catch((e)=>{
-      console.log(e);
-    });
+    if (roomData.length > 0) {
+      fetchData().then(() => {}).catch((e) => {
+        console.log(e);
+      });
+    }
 
   }, [roomData])
 
@@ -55,7 +59,7 @@ const Combo = ({ getCombo, roomData }) => {
       {comboData.map((item, index) => (
         <Link to={`${match.url}/${String(item.id)}`} key={index}>
           <div className={styles.combo_wrap}>
-            <img className={styles.img_wrap} src={loadImgArr[index].src} />
+            <img className={styles.img_wrap} src={loadImgArr[index].src}/>
             <span>{item.name}</span>
           </div>
         </Link>

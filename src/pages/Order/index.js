@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect, useReducer,memo,useMemo} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
 import {Tabs, Radio, Cascader} from 'antd';
 import styles from "./index.css";
@@ -8,13 +8,11 @@ import HouseHeader from "@/components/HouseHeader";
 import {getCombo, getRoomList} from '@/config/api';
 
 const {TabPane} = Tabs;
-
+const ChildCombo = memo(Combo);
 const Order = ({communityId}) => {
   const match = useRouteMatch();
   const [options,
     setOptions] = useState([]);
-  const [rooms,
-    setRooms] = useState([]);
   const [roomData,setRoomData] = useState([]);
   useEffect(() => {
     const fetchData = async() => {
@@ -22,6 +20,7 @@ const Order = ({communityId}) => {
       const options = haddleData(data);
       setOptions(options)
     }
+    console.log(options);
     fetchData();
     const haddleData = (data) => {
       var container = {};
@@ -51,8 +50,8 @@ const Order = ({communityId}) => {
     }
   }, []);
   const onChange = (value) => {
-    setRoomData(value);
     console.log(value);
+    setRoomData(value);
   }
   return (
     <Switch>
@@ -68,7 +67,7 @@ const Order = ({communityId}) => {
           </div>
           <div>
           <Cascader options={options} onChange={onChange} placeholder="请选择房间"/>
-          <Combo getCombo={getCombo} roomData={roomData}/>
+          <ChildCombo roomData={useMemo(()=>roomData,[roomData])}/>
           </div>
         </div>
       </Route>
