@@ -26,7 +26,7 @@ export const getRoomList = (param) => {
 }
 
 export const getCombo = (param) => {
-    const url = '/style/findByTypeId';
+    const url = '/style/findType';
     return axios.post(url,param)
 }
 

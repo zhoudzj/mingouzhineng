@@ -6,7 +6,7 @@ const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 const COMBO_DATA = [
 ];
 
-const Combo = ({ getCombo, typeId }) => {
+const Combo = ({ getCombo, roomData }) => {
   const match = useRouteMatch();
 
   const [comboData,
@@ -37,7 +37,7 @@ const Combo = ({ getCombo, typeId }) => {
       return arr;
     }
     const fetchData = async () => {
-      const data = await getCombo({ typeId });
+      const data = await getCombo({ roomData });
       const arr = await fn(data);
       setLoadImgArr(arr);
       setComboData(data);
@@ -48,7 +48,7 @@ const Combo = ({ getCombo, typeId }) => {
       console.log(e);
     });
 
-  }, [typeId])
+  }, [roomData])
 
   return (
     <div className={styles.g_combos}>
