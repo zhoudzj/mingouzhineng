@@ -47,11 +47,11 @@ const Combo = ({roomData}) => {
       setComboData(data);
     }
     if (roomData.length > 0) {
-      fetchData().then(() => {}).catch((e) => {
+      fetchData().then(() => {
+      }).catch((e) => {
         console.log(e);
       });
     }
-
   }, [roomData])
 
   return (

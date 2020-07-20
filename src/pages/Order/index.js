@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useReducer,memo,useMemo} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
 import {Tabs, Radio, Cascader} from 'antd';
 import styles from "./index.css";
 import Combo from "@/components/Combo";
@@ -50,15 +51,18 @@ const Order = ({communityId}) => {
     }
   }, []);
   const onChange = (value) => {
+<<<<<<< HEAD
     console.log(value);
+=======
+>>>>>>> cd464659f95af06746a66c546732842871c7ab70
     setRoomData(value);
   }
   return (
-    <Switch>
+    <CacheSwitch>
       <Route path={`${match.path}/:styleId`}>
         <OrderDetail/>
       </Route>
-      <Route path={`${match.path}`} exact>
+      <CacheRoute path={`${match.path}`} exact>
         <HouseHeader title={"智能选装"}/>
         <div className={styles.order_wrap}>
           <div className={styles.table_wrap}>
@@ -70,8 +74,8 @@ const Order = ({communityId}) => {
           <ChildCombo roomData={useMemo(()=>roomData,[roomData])}/>
           </div>
         </div>
-      </Route>
-    </Switch>
+      </CacheRoute>
+    </CacheSwitch>
   )
 }
 
