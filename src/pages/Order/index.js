@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer,memo,useMemo} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
-import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 import {Tabs, Radio, Cascader} from 'antd';
 import styles from "./index.css";
 import Combo from "@/components/Combo";
@@ -9,7 +9,6 @@ import HouseHeader from "@/components/HouseHeader";
 import {getCombo, getRoomList} from '@/config/api';
 
 const {TabPane} = Tabs;
-const ChildCombo = memo(Combo);
 const Order = ({communityId}) => {
   const match = useRouteMatch();
   const [options,
@@ -51,10 +50,6 @@ const Order = ({communityId}) => {
     }
   }, []);
   const onChange = (value) => {
-<<<<<<< HEAD
-    console.log(value);
-=======
->>>>>>> cd464659f95af06746a66c546732842871c7ab70
     setRoomData(value);
   }
   return (
@@ -66,12 +61,12 @@ const Order = ({communityId}) => {
         <HouseHeader title={"智能选装"}/>
         <div className={styles.order_wrap}>
           <div className={styles.table_wrap}>
-            <span className={styles.room_style}>户型</span>
-            <span className={styles.rec_style}>推荐套餐</span>
+            <div className={styles.room_style}>户型</div>
+            <div className={styles.rec_style}>推荐套餐</div>
           </div>
-          <div>
+          <div className={styles.order_right}>
           <Cascader options={options} onChange={onChange} placeholder="请选择房间"/>
-          <ChildCombo roomData={useMemo(()=>roomData,[roomData])}/>
+          <Combo roomData={roomData}/>
           </div>
         </div>
       </CacheRoute>

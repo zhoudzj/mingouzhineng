@@ -16,7 +16,6 @@ const Combo = ({roomData}) => {
     setLoadImgArr] = useState([]);
 
   useEffect(() => {
-    console.log(roomData);
     const loadImage = (src) => {
       return new Promise(function (resolve, reject) {
         let img = new Image();
@@ -31,20 +30,17 @@ const Combo = ({roomData}) => {
         img.src = src;
       })
     }
-
-    const fn = async(resData) => {
-      let arr = [];
-      for (let i = 0; i < resData.length; i++) {
-        const img = await loadImage(pictureDomian + resData[i].img);
-        arr.push(img);
+    const fn = async(arr) => {
+      for (let i = 0; i < arr.length; i++) {
+        const img = await loadImage(pictureDomian + arr[i].img);
+        arr[i].img = img
       }
       return arr;
     }
     const fetchData = async() => {
       const data = await getCombo({roomData});
       const arr = await fn(data);
-      setLoadImgArr(arr);
-      setComboData(data);
+      setComboData(arr);
     }
     if (roomData.length > 0) {
       fetchData().then(() => {
@@ -59,7 +55,7 @@ const Combo = ({roomData}) => {
       {comboData.map((item, index) => (
         <Link to={`${match.url}/${String(item.id)}`} key={index}>
           <div className={styles.combo_wrap}>
-            <img className={styles.img_wrap} src={loadImgArr[index].src}/>
+            <img className={styles.img_wrap} src={item['img'].src}/>
             <span>{item.name}</span>
           </div>
         </Link>
