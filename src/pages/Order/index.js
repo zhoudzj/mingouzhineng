@@ -2,7 +2,7 @@ import React, {useState, useEffect, useReducer,memo,useMemo} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 import {Tabs, Radio, Cascader} from 'antd';
-import styles from "./index.css";
+import styles from "./index.scss";
 import Combo from "@/components/Combo";
 import OrderDetail from "@/pages/OrderDetail";
 import HouseHeader from "@/components/HouseHeader";
@@ -14,13 +14,13 @@ const Order = ({communityId}) => {
   const [options,
     setOptions] = useState([]);
   const [roomData,setRoomData] = useState([]);
+
   useEffect(() => {
     const fetchData = async() => {
       const data = await getRoomList({communityId});
       const options = haddleData(data);
       setOptions(options)
     }
-    console.log(options);
     fetchData();
     const haddleData = (data) => {
       var container = {};
@@ -45,28 +45,30 @@ const Order = ({communityId}) => {
         const result = Object.values(container).map((arr,index)=>{
           return {value:(Object.keys(container))[index],label:(Object.keys(container))[index]+'幢',children:arr}
         });
-        console.log(result);
       return result
     }
   }, []);
   const onChange = (value) => {
     setRoomData(value);
   }
+  // const onnameHandle = () => {
+
+  // }
   return (
-    <CacheSwitch>
+    <CacheSwitch >
       <Route path={`${match.path}/:styleId`}>
-        <OrderDetail/>
+        <OrderDetail roomData={roomData} />
       </Route>
       <CacheRoute path={`${match.path}`} exact>
         <HouseHeader title={"智能选装"}/>
-        <div className={styles.order_wrap}>
+        <div className={styles.order_wrap} id = "order">
           <div className={styles.table_wrap}>
             <div className={styles.room_style}>户型</div>
             <div className={styles.rec_style}>推荐套餐</div>
           </div>
           <div className={styles.order_right}>
           <Cascader options={options} onChange={onChange} placeholder="请选择房间"/>
-          <Combo roomData={roomData}/>
+          <Combo roomData={roomData} />
           </div>
         </div>
       </CacheRoute>

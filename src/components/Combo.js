@@ -14,7 +14,7 @@ const Combo = ({roomData}) => {
     setComboData] = useState(COMBO_DATA);
   const [loadImgArr,
     setLoadImgArr] = useState([]);
-
+   
   useEffect(() => {
     const loadImage = (src) => {
       return new Promise(function (resolve, reject) {
@@ -53,7 +53,7 @@ const Combo = ({roomData}) => {
   return (
     <div className={styles.g_combos}>
       {comboData.map((item, index) => (
-        <Link to={`${match.url}/${String(item.id)}`} key={index}>
+        <Link to={{pathname:`${match.url}/${String(item.id)}`,state:item.name}} key={index}>
           <div className={styles.combo_wrap}>
             <img className={styles.img_wrap} src={item['img'].src}/>
             <span>{item.name}</span>

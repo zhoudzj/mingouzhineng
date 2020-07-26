@@ -1,20 +1,20 @@
 import axios from "./axiosPlugin"
-
+//用户登录
 export const getLogin = (param) => {
     const url = '/user/login';
     return axios.post(url,param)
 }
-
+//获取用户信息
 export const getUserInfo = (param) => {
     const url = '/user/getUserInfo';
     return axios.post(url,param)
 }
-
+//用户注册
 export const getRegister = (param) => {
     const url = '/user/register';
     return axios.post(url,param)
 }
-
+//登出
 export const loginOut = (param) => {
     const url = '/user/logout';
     return axios.post(url,param)
@@ -24,17 +24,17 @@ export const getRoomList = (param) => {
     const url = '/house/list';
     return axios.post(url,param)
 }
-
+//查找房产类型
 export const getCombo = (param) => {
     const url = '/style/findType';
     return axios.post(url,param)
 }
-
+//获取产品列表
 export const getProductList = (param) => {
     const url = '/product/list';
     return axios.post(url,param)
 }
-
+//获取产品类型
 export const getProductByType = (param) => {
     const url = '/product/findByTypeId';
     return axios.post(url,param)

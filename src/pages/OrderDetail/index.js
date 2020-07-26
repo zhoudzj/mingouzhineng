@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
+import React, { useState, useEffect, useReducer,useContext,memo,useCallback,useMemo } from 'react';
+import { Switch, Route, Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom'
 import {
   Table,
   Button,
@@ -13,9 +13,12 @@ import {
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import DeviceDetail from "@pages/DeviceDetail/";
-import {getProductList,getDefaultProductList} from '@/config/api';
+import {getProductList,getDefaultProductList,createOrder} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg';
+import {Context} from '@/context-manager'
 
+const MemoTable = memo(Table);
+const MemoForm = memo(Form);
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 
 const {Text} = Typography;
@@ -25,17 +28,78 @@ const PRODUCT_MODLE_TYPEID = 2;
 const PRODUCT_PANEL_TYPEID = 4;
 const PRODUCT_SOCKET_TYPEID = 5;
 
-const OrderDetail = () => {
+let initFormValue = {
+  comunityName: '春月锦庐',
+  style:'',
+  room:'',
+  salesman:'',
+  name: ''
+}
+
+const reducer = (state, action) => {
+    switch(action.type){
+        case "init":
+            return {
+                ...state,
+                title:action.payload.title,
+                style:action.payload.style,
+                room:action.payload.room
+            }
+        default:
+            return state;
+    }
+}
+
+const layout = {
+  labelCol: {
+    offset: 5,
+    span: 4,
+  },
+  wrapperCol: {
+    span: 10,
+  },
+}
+
+const getColor = (index) => {
+    if(index===1){
+      return '雪花银'
+    }else if(index===2){
+      return '香槟金'
+    }else if(index===3){
+      return '云母黑'
+    }
+  }
+
+const OrderDetail = ({roomData}) => {
+  const [form] = Form.useForm();
+  
+  const comunityName = useContext(Context);
   const match = useRouteMatch();
   const history = useHistory();
+  const {state} = useLocation();
   const [tableData,
     setTableData] = useState([]);
   const [previewList,setPreviewList] = useState([]); 
   const [visible,
     setVisible] = useState(false);
   const [current,setCurrent] = useState(1);
+  const room = roomData.join('-');
+
+  initFormValue = comunityName ? {comunityName:comunityName,style:state,room:room}: initFormValue;
+
+  const onFinish = useCallback(async values => {
+    // previewList
+    console.log('Finish:',values);
+    
+    const obj = Object.assign({list:previewList},values);
+    console.log(obj);
+    await createOrder(obj);
+
+    setVisible(false);
+  },[previewList]);
+
+
   const changeTableData = (optionalData, associationData) => {
-    console.log(associationData);
     const rawData = tableData;
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);
@@ -78,19 +142,9 @@ const OrderDetail = () => {
     setTableData(rawData)
   };
 
-  const getColor = (index) => {
-    if(index===1){
-      return '雪花银'
-    }else if(index===2){
-      return '香槟金'
-    }else if(index===3){
-      return '云母黑'
-    }
-  }
-  const onPageChange = page => {
-    console.log(page);
+  const onPageChange = useCallback(page => {
     setCurrent(page)
-  }
+  },[]);
   const preView = async () => {
     const data = await getDefaultProductList({id: match.params.styleId});
     if(data&&data.length>0){
@@ -100,13 +154,13 @@ const OrderDetail = () => {
     }
     setVisible(true);
   };
-  const handleOk = e => {
+  const handleOk = useCallback(e => {
+    form.submit();
+  },[]);
+  const handleCancel = useCallback(e => {
     setVisible(false);
-  };
-  const handleCancel = e => {
-    setVisible(false);
-  };
-  const columns = [
+  },[]);
+  const columns = useMemo(()=>[
     {
       title: '设备名称',
       dataIndex: 'type',
@@ -114,6 +168,7 @@ const OrderDetail = () => {
       // textWrap: 'word-break',
       ellipsis: true,
       render: (value, row, index) => {
+        console.log(value);
         const obj = {
           children: value,
           props: {}
@@ -215,9 +270,21 @@ const OrderDetail = () => {
         }
       }
     }
-  ];
+  ],[]);
+
+  const callbackHandler = useCallback((pageData) => {
+            let totalCount = 0;
+            pageData.forEach(({ totalPrice }) => {
+              if (totalPrice)
+                totalCount += totalPrice;
+            }
+          );
+          return ( <><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text><Button style = {{ float: "right" }} onClick = {
+            preView
+          }> 提交 </Button></td></tr></>) },[tableData]);
 
   useEffect(() => {
+
     const handdleRawItem = (typeId, rawData, item) => {
       const arr = rawData.filter(value => value.typeId === typeId);
       item.length = arr.length;
@@ -257,22 +324,13 @@ const OrderDetail = () => {
       </Route>
       <Route path={`${match.path}`} exact>
         <HouseHeader title={"选择推荐"} />
-        <Table
+        <MemoTable
           columns={columns}
           dataSource={tableData}
           rowKey='id'
           pagination={false}
           bordered
-          summary={(pageData) => {
-            let totalCount = 0;
-            pageData.forEach(({ totalPrice }) => {
-              if (totalPrice)
-                totalCount += totalPrice;
-            }
-          );
-          return ( <><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text> < Button style = {{ float: "right" }}onClick = {
-            preView
-          } > 提交 < /Button></td></tr></>) }}/>
+          summary={callbackHandler}/>
         <Modal
           width={800}
           title="订单预览"
@@ -291,33 +349,40 @@ const OrderDetail = () => {
             <div className = {styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
           </List.Item>}/>:null}
           <div>{current===2?
-          (<Form>
+          (<MemoForm {...layout} name="prodForm" form={form} initialValues={initFormValue} onFinish={onFinish}>
             <Form.Item
             label="项目名称"
-            name="项目名称">
+            name="comunityName"
+            >
               <Input />
             </Form.Item>
             <Form.Item
             label="户型"
-            name="户型">
+            name="style"
+            >
               <Input />
             </Form.Item>
             <Form.Item
             label="房号"
-            name="房号">
+            name="room"
+            >
               <Input />
             </Form.Item>
             <Form.Item
             label="销售姓名"
-            name="销售姓名">
+            name="salesman"
+            rules={[{required:true,message:'销售姓名不能为空'}]}
+            >
               <Input />
             </Form.Item>
             <Form.Item
             label="姓名"
-            name="姓名">
+            name="name"
+            rules={[{required:true,message:'姓名不能为空'}]}
+            >
               <Input />
             </Form.Item>
-          </Form>):null}
+          </MemoForm>):null}
           </div>
           <Pagination simple defaultCurrent={1} defaultPageSize={1} onChange={onPageChange} total={2} />
         </Modal>

@@ -1,9 +1,10 @@
+@import "@/assets/scss/common";
+
 .order_wrap {
   margin-top:50px
 }
 
 .table_wrap {
-  /*display: table;*/
   width:200px;
   float:left;
   font-size: 16px;
@@ -12,16 +13,24 @@
 }
 
 .room_style {
-  width:100px;
-  /*display: table-cell;*/
-  text-align: center
+  width:100%;
+  height: 50px;
+  text-align: center;
 }
 
 .rec_style {
-  /*display: table-cell;*/
-  width:200px;
+  width:100%;
 }
 
 .order_right {
   margin-left: 200px;
+  text-align: left
+}
+
+:global {
+  #order{
+    .ant-cascader-picker{
+        margin-left: 20px!important
+    }
+  }
 }
