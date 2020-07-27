@@ -49,6 +49,11 @@ export const createOrder = (param) => {
     const url = '/order/create';
     return axios.post(url,param)
 }
+//获取订单
+export const getOrderList = (param) => {
+    const url = '/order/list';
+    return axios.post(url,param)
+}
 //生成pdf
 export const createPdf = (param) => {
     const url = '/order/createPdf';

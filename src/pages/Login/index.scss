@@ -23,7 +23,12 @@
 :global {
   #test {
     .ant-tabs {
-      color: white
+      color: white;
+      > .ant-tabs-nav {
+        .ant-tabs-nav-wrap{
+          justify-content: center
+        }
+      }
     }
     .ant-tabs-bar {
         border-bottom: 0;
