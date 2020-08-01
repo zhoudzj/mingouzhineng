@@ -22,6 +22,9 @@
 
 :global {
   #test {
+    .ant-tabs-tab {
+      justify-content: center;
+    }
     .ant-tabs {
       color: white;
       > .ant-tabs-nav {

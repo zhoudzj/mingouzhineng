@@ -26,7 +26,6 @@ const Combo = ({roomData}) => {
           img.src = errorImg;
           resolve(img);
         }
-        console.log(src);
         img.src = src;
       })
     }

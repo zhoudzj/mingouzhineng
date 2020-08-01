@@ -8,7 +8,8 @@ import {
   List,
   Form,
   Pagination,
-  Input
+  Input,
+  message
 } from 'antd';
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
@@ -84,18 +85,27 @@ const OrderDetail = ({roomData}) => {
     setVisible] = useState(false);
   const [current,setCurrent] = useState(1);
   const room = roomData.join('-');
-
   initFormValue = comunityName ? {comunityName:comunityName,style:state,room:room}: initFormValue;
 
   const onFinish = useCallback(async values => {
-    // previewList
-    console.log('Finish:',values);
     
-    const obj = Object.assign({list:previewList},values);
-    console.log(obj);
-    await createOrder(obj);
+    const newlist = previewList.map(item => {
+      const filterObj = {}
+      for (let key in item) {
+        if (['id', 'number'].includes(key)) {
+          filterObj[key]=item[key];
+        }
+      }
+      return filterObj
+    })
 
-    setVisible(false);
+    const obj = Object.assign({list:newlist},values);
+    console.log(obj);
+    const res = await createOrder(obj);
+    if(res){
+        setVisible(false);
+        message.info('创建订单成功！')
+    }
   },[previewList]);
 
 
