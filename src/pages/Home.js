@@ -60,7 +60,7 @@ const Home = () => {
                     {HouseInfos.map((info, index) => (<MemoHouse houseClickHandle={houseClickHandle} title={info.title} url={info.url} key={index} houseId={100 + index}/>))
 }
                 </div>
-            </Route>
+            </Route>   
         </Switch>
     )
 }

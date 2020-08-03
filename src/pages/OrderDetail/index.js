@@ -108,7 +108,6 @@ const OrderDetail = ({roomData}) => {
     }
   },[previewList]);
 
-
   const changeTableData = (optionalData, associationData) => {
     const rawData = tableData;
     if (associationData.length > 0) {

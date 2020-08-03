@@ -12,5 +12,10 @@
   }
 
   .app_title {
+    text-align: center;
+    flex:1
+  }
+
+  .flex { 
     flex:1
   }
