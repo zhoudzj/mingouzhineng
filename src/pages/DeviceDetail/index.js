@@ -102,7 +102,7 @@ const DeviceDetail = ({changeTableData}) => {
     setSocketData([...socketData]);
   }
   const haddleGoBack = ()=>{
-    if(selectedData.length===0||selectedSockets.length===0){
+    if(selectedData.length===0&&selectedSockets.length===0){
       message.error({
         content: '请选择一项',
         duration: 1.5,

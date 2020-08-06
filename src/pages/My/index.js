@@ -12,7 +12,7 @@ import {
   message,
   Space
 } from 'antd';
-import {getOrderList,getOrderListDetail} from '@/config/api';
+import {getOrderList,getOrderListDetail,removeOrder} from '@/config/api';
 import {connect} from 'react-redux';
 import OrderDetail from './detail';
 
@@ -23,10 +23,22 @@ const My = ({userInfo}) => {
     setTableData] = useState([]);
   const [isShow,setIsShow] = useState(false);
   const [orderId,setOrderId] = useState('');
+  const [state,setState] = useState({loading:false,pagination:false,bordered:false});
 
   const goDetail = async (record) => {
     setIsShow(true);
     setOrderId(String(record.id));
+  };
+
+  const deleteOrder = async (record) => {
+        setState({...state,loading:true})
+
+    await removeOrder({orderId:String(record.id)});
+    const rawData = await getOrderList();
+        setState({...state,loading:false})
+
+      console.log(rawData);
+    setTableData(rawData);
   };
   const handleCancel = useCallback(() => {
     setIsShow(false)
@@ -61,11 +73,14 @@ const My = ({userInfo}) => {
       dataIndex: 'create_time',
     },
     {
-      title: '查看详情',
+      title: '操作',
       key: 'action',
       width: '100px',
       render: (text,record) => (
+        <div>
         <Space size="middle"><a onClick={()=>goDetail(record)}>详情</a></Space>
+        |<Space size="middle"><a onClick={()=>deleteOrder(record)}>删除</a></Space>
+        </div>
       )
     }
   ],[]);
@@ -83,12 +98,11 @@ const My = ({userInfo}) => {
 
   return (
     <div>
-      <Header text={'我的订单'}/>
+      <Header text={'我的订单'} home={'首页'}/>
       <MemoTable columns={columns}
           dataSource={tableData}
           rowKey='id'
-          pagination={false}
-          bordered/>
+          {...state}/>
        <MemoOrderDetail isShow={isShow} orderId={orderId} handleCancel={handleCancel}/>   
     </div>
   )

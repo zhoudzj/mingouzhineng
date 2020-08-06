@@ -18,15 +18,38 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
   const [tableData,
     setTableData] = useState([]);
     console.log('走了')
-
+    const getColor = (index) => {
+    if(index===1){
+      return '雪花银'
+    }else if(index===2){
+      return '香槟金'
+    }else if(index===3){
+      return '云母黑'
+    }
+  }
   const columns = useMemo(()=>[
     {
       title:'名称',
       dataIndex:'name'
     },
     {
+      title: '品牌',
+      dataIndex: 'brand'
+    },
+    {
       title:'类型',
       dataIndex: 'type'
+    },
+    {
+      title:'模式',
+      dataIndex: 'model'
+    },
+    {
+      title:'颜色',
+      dataIndex:'color',
+      render: (value, row, index) => {
+        return (<span>{getColor(value)}</span>)
+      }
     },
     {
       title: '价格',
@@ -35,6 +58,10 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
     {
       title: '数量',
       dataIndex: 'number'
+    },
+    {
+      title: '单位',
+      dataIndex: 'unit'
     }
   ],[])
   

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {useHistory, withRouter} from 'react-router-dom'
 import {ReactDOM} from 'react-router-dom'
 import styles from '@/assets/css/header_hoc.css'
-import {Modal} from 'antd';
+import {Modal,Menu,Dropdown} from 'antd';
 import {connect} from 'react-redux';
 import {loginOut} from '@/config/api'
 
@@ -55,13 +55,17 @@ const HeaderHOC = WrappedComponent => {
         .history
         .push('/my');
     }
-
     render() {
+      const menu = (<Menu><Menu.Item><a target="_blank" rel="noopener noreferrer" onClick={this.gotoMyPage}>我的订单</a></Menu.Item></Menu>)
+
       return (
         <div>
           <WrappedComponent {...this.props}>
             <div className={styles.hoc}>
-              <span className={styles.user} onClick={this.gotoMyPage}>{this.userName}</span>|<span className={styles.logout} onClick={this.handleLogout}>退出</span>
+              <Dropdown overlay={menu}>
+                <a className={styles.user}>{this.userName}</a>
+              </Dropdown>
+              |<span className={styles.logout} onClick={this.handleLogout}>退出</span>
             </div>
           </WrappedComponent>
         </div>

@@ -15,3 +15,9 @@
 .g_item_item {
   width: 60px
 }
+
+.g_totalprice {
+  color:red;
+  padding: 16px 24px;
+  float: right
+}

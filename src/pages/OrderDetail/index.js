@@ -81,6 +81,7 @@ const OrderDetail = ({roomData}) => {
   const [tableData,
     setTableData] = useState([]);
   const [previewList,setPreviewList] = useState([]); 
+  const [totalPrice,setTotalPrice] = useState(0);
   const [visible,
     setVisible] = useState(false);
   const [current,setCurrent] = useState(1);
@@ -98,9 +99,7 @@ const OrderDetail = ({roomData}) => {
       }
       return filterObj
     })
-
     const obj = Object.assign({list:newlist},values);
-    console.log(obj);
     const res = await createOrder(obj);
     if(res){
         setVisible(false);
@@ -154,21 +153,35 @@ const OrderDetail = ({roomData}) => {
   const onPageChange = useCallback(page => {
     setCurrent(page)
   },[]);
+
   const preView = async () => {
     const data = await getDefaultProductList({id: match.params.styleId});
     if(data&&data.length>0){
         const topArr = data.filter(e => (e.typeId === PRODUCT_MACHINE_TYPEID||e.typeId === PRODUCT_MODLE_TYPEID));
         const otherArr = data.filter(e => (e.typeId !== PRODUCT_MACHINE_TYPEID&&e.typeId !== PRODUCT_MODLE_TYPEID));
         setPreviewList([...topArr,...tableData,...otherArr]);
-    }
+    }    
     setVisible(true);
   };
+  useEffect(()=>{
+            let totalPrice = 0;
+            previewList.forEach(({ price,number }) => {
+              console.log(price)
+              if (price&&number)
+                totalPrice += (Number(price)*number);
+            }
+          );
+    setTotalPrice(totalPrice)  
+  },[previewList])
+
   const handleOk = useCallback(e => {
     form.submit();
   },[]);
+
   const handleCancel = useCallback(e => {
     setVisible(false);
   },[]);
+
   const columns = useMemo(()=>[
     {
       title: '设备名称',
@@ -282,13 +295,7 @@ const OrderDetail = ({roomData}) => {
   ],[]);
 
   const callbackHandler = useCallback((pageData) => {
-            let totalCount = 0;
-            pageData.forEach(({ totalPrice }) => {
-              if (totalPrice)
-                totalCount += totalPrice;
-            }
-          );
-          return ( <><tr><th></th><td></td><td></td><td> 总价 : <Text type="danger">￥{totalCount}</Text><Button style = {{ float: "right" }} onClick = {
+          return ( <><tr><th></th><td></td><td></td><td><Button onClick = {
             preView
           }> 提交 </Button></td></tr></>) },[tableData]);
 
@@ -356,7 +363,8 @@ const OrderDetail = ({roomData}) => {
             <div className = {styles.g_item_item}>{getColor(item.color)}</div>
             <div className = {styles.g_item_item}>{`￥${item.price}`}</div>
             <div className = {styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
-          </List.Item>}/>:null}
+          </List.Item>}
+          footer={<div className = {styles.g_totalprice}>总价:{`￥${totalPrice}`}</div>}/>:null}
           <div>{current===2?
           (<MemoForm {...layout} name="prodForm" form={form} initialValues={initFormValue} onFinish={onFinish}>
             <Form.Item

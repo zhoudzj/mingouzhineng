@@ -59,6 +59,11 @@ export const getOrderListDetail = (param) => {
     const url = '/order/detail';
     return axios.post(url,param)
 }
+//删除订单
+export const removeOrder = (param) => {
+    const url = '/order/remove';
+    return axios.post(url,param)
+}
 //生成pdf
 export const createPdf = (param) => {
     const url = '/order/createPdf';
