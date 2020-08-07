@@ -31,13 +31,10 @@ const My = ({userInfo}) => {
   };
 
   const deleteOrder = async (record) => {
-        setState({...state,loading:true})
-
+    setState({...state,loading:true})
     await removeOrder({orderId:String(record.id)});
     const rawData = await getOrderList();
         setState({...state,loading:false})
-
-      console.log(rawData);
     setTableData(rawData);
   };
   const handleCancel = useCallback(() => {
