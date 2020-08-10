@@ -215,7 +215,7 @@ const OrderDetail = ({roomData}) => {
       C2:{t:'s',v:'房号:10-2-2'},
       D2:{t:'s',v:'户型:A2'},
       A3:{t:'s',v:'总价'},
-      B3:{t:'s',v:totalPrice}
+      B3:{t:'s',v:`${totalPrice}元`}
     }
     const _headers = ['产品名称','颜色','价格','数量']
     let headers = _headers.map((v,i)=>Object.assign({},{v:v,t:'s',position:String.fromCharCode(65+i)+4})).reduce((prev,next) => Object.assign({},prev,{[next.position]:{v:next.v,t:next.t}}),{});
@@ -228,13 +228,14 @@ const OrderDetail = ({roomData}) => {
     let book = xlsx
         .utils
         .book_new();
-    
+        console.log(output);
+        console.log(ref);
+
     xlsx
       .utils
       .book_append_sheet(book, Object.assign({},output,{'!ref':ref}), "sheet1");
     xlsx.writeFile(book, `user${new Date().getTime()}.xls`);
-    console.log(data);
-    console.log(output);
+   
   }
 
   useEffect(() => {

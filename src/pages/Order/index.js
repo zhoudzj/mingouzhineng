@@ -18,8 +18,10 @@ const Order = ({communityId}) => {
   useEffect(() => {
     const fetchData = async() => {
       const data = await getRoomList({communityId});
-      const options = haddleData(data);
-      setOptions(options)
+      if(data){
+        const options = haddleData(data);
+        setOptions(options)
+      }
     }
     fetchData();
     const haddleData = (data) => {
@@ -47,7 +49,7 @@ const Order = ({communityId}) => {
         });
       return result
     }
-  }, []);
+  }, [communityId]);
   const onChange = (value) => {
     setRoomData(value);
   }
