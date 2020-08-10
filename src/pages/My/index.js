@@ -37,9 +37,11 @@ const My = ({userInfo}) => {
         setState({...state,loading:false})
     setTableData(rawData);
   };
+
   const handleCancel = useCallback(() => {
     setIsShow(false)
   },[isShow]);
+  
   const columns = useMemo(()=>[
     {
       title: '楼盘名称',
