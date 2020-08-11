@@ -114,7 +114,6 @@ const OrderDetail = ({roomData}) => {
     : initFormValue;
   //提交订单到服务器
   const onFinish = useCallback(async values => {
-
     const newlist = previewList.map(item => {
       const filterObj = {}
       for (let key in item) {
@@ -196,6 +195,8 @@ const OrderDetail = ({roomData}) => {
   };
   //生成excel
   const submit = () => {
+    const formData = form.getFieldsValue(['comunityName','style','room','salesman','name']);
+    console.log(formData);
     let arr = previewList.map((item, index) => {
       return {
           '产品名称': item.name,
@@ -209,11 +210,11 @@ const OrderDetail = ({roomData}) => {
     //     .json_to_sheet(arr);
     const topHeader = {
       A1:{t:'s',v:'项目名称'},
-      B1:{t:'s',v:'春月锦庐'},
-      A2:{t:'s',v:'销售姓名:王五'},
-      B2:{t:'s',v:'姓名:赵六'},
-      C2:{t:'s',v:'房号:10-2-2'},
-      D2:{t:'s',v:'户型:A2'},
+      B1:{t:'s',v:formData.comunityName},
+      A2:{t:'s',v:`销售姓名:${formData.salesman}`},
+      B2:{t:'s',v:`姓名:${formData.name}`},
+      C2:{t:'s',v:`房号:${formData.room}`},
+      D2:{t:'s',v:`户型:${formData.style}`},
       A3:{t:'s',v:'总价'},
       B3:{t:'s',v:`${totalPrice}元`}
     }
@@ -228,14 +229,11 @@ const OrderDetail = ({roomData}) => {
     let book = xlsx
         .utils
         .book_new();
-        console.log(output);
-        console.log(ref);
 
     xlsx
       .utils
       .book_append_sheet(book, Object.assign({},output,{'!ref':ref}), "sheet1");
     xlsx.writeFile(book, `user${new Date().getTime()}.xls`);
-   
   }
 
   useEffect(() => {
@@ -369,13 +367,12 @@ const OrderDetail = ({roomData}) => {
   ], []);
 
   const callbackHandler = useCallback((pageData) => {
-    return ( <>< tr > <th></th> < td > </td> < td > </td> < td > <Button onClick={preView}>
+    return (<><tr><th></th><td></td><td></td><td><Button onClick={preView}>
       订单预览
-    </Button> < /td></tr > </>)
+    </Button></td></tr></>)
   }, [tableData]);
 
   useEffect(() => {
-
     const handdleRawItem = (typeId, rawData, item) => {
       const arr = rawData.filter(value => value.typeId === typeId);
       item.length = arr.length;
@@ -429,7 +426,7 @@ const OrderDetail = ({roomData}) => {
           footer={current === 2
           ? (
             <div>
-              <Button onClick={submit}>生成EXCEL</Button>
+              <Button onClick={submit}>导出EXCEL</Button>
               <Button key='submit' type="primary" onClick={handleOk}>提交订单</Button>
             </div>
           )
