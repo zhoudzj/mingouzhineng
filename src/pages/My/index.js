@@ -22,12 +22,12 @@ const My = ({userInfo}) => {
   const [tableData,
     setTableData] = useState([]);
   const [isShow,setIsShow] = useState(false);
-  const [orderId,setOrderId] = useState('');
+  const [orderItem,setOrderItem] = useState({});
   const [state,setState] = useState({loading:false,pagination:false,bordered:false});
 
   const goDetail = async (record) => {
     setIsShow(true);
-    setOrderId(String(record.id));
+    setOrderItem(record);
   };
 
   const deleteOrder = async (record) => {
@@ -102,7 +102,7 @@ const My = ({userInfo}) => {
           dataSource={tableData}
           rowKey='id'
           {...state}/>
-       <MemoOrderDetail isShow={isShow} orderId={orderId} handleCancel={handleCancel}/>   
+       <MemoOrderDetail isShow={isShow} orderItem={orderItem} handleCancel={handleCancel}/>   
     </div>
   )
 }

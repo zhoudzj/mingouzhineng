@@ -29,7 +29,7 @@ import {
 import HouseHeader from "@/components/HouseHeader";
 import styles from "./index.css";
 import DeviceDetail from "@pages/DeviceDetail/";
-import {getProductList, getDefaultProductList, createOrder} from '@/config/api';
+import {getProductList, getDefaultProductList, createOrder,createPdf} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg';
 import {Context} from '@/context-manager';
 import xlsx from 'xlsx';
@@ -196,7 +196,6 @@ const OrderDetail = ({roomData}) => {
   //生成excel
   const submit = () => {
     const formData = form.getFieldsValue(['comunityName','style','room','salesman','name']);
-    console.log(formData);
     let arr = previewList.map((item, index) => {
       return {
           '产品名称': item.name,
@@ -236,6 +235,9 @@ const OrderDetail = ({roomData}) => {
     xlsx.writeFile(book, `user${new Date().getTime()}.xls`);
   }
 
+  const getPdf = async() => {
+    await createPdf({url:window.location.href})
+  }
   useEffect(() => {
     let totalPrice = 0;
     previewList.forEach(({price, number}) => {
@@ -426,6 +428,7 @@ const OrderDetail = ({roomData}) => {
           footer={current === 2
           ? (
             <div>
+              <Button onClick={getPdf}>导出pdf</Button>
               <Button onClick={submit}>导出EXCEL</Button>
               <Button key='submit' type="primary" onClick={handleOk}>提交订单</Button>
             </div>

@@ -14,7 +14,7 @@ import {
 import {getOrderListDetail} from '@/config/api';
 import xlsx from 'xlsx';
 
-const OrderDetail = ({isShow,orderId,handleCancel})=>{
+const OrderDetail = ({isShow,orderItem,handleCancel})=>{
 
   const [tableData,
     setTableData] = useState([]);
@@ -67,7 +67,7 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
   
   useEffect(() => {
     const fetchData = async () => {
-      const rawData = await getOrderListDetail({orderId});
+      const rawData = await getOrderListDetail({orderId:String(orderItem.id)});
       console.log(rawData);
       setTableData(rawData);
     }
@@ -79,8 +79,9 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
   }, [isShow]);
 
   const submit = useCallback(() => {
-    
+    let totalPrice = 0;
     let arr = tableData.map((item, index) => {
+      totalPrice += item.price*item.number;
       return {
           '产品名称': item.name,
           '颜色': getColor(item.color),
@@ -90,12 +91,12 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
     });
     const topHeader = {
       A1:{t:'s',v:'项目名称'},
-      B1:{t:'s',v:'项目名称'},
-      A2:{t:'s',v:'销售姓名:'},
-      B2:{t:'s',v:`姓名:`},
-      C2:{t:'s',v:`房号:`},
-      D2:{t:'s',v:`户型:`},
-      A3:{t:'s',v:'总价'},
+      B1:{t:'s',v:`${orderItem.project_name}`},
+      A2:{t:'s',v:`销售姓名:${orderItem.sales_name}`},
+      B2:{t:'s',v:`姓名:${orderItem.master_name}`},
+      C2:{t:'s',v:`房号:${orderItem.house_num}`},
+      D2:{t:'s',v:`户型:${orderItem.style_name}`},
+      A3:{t:'s',v:`总价:${totalPrice}`},
       B3:{t:'s',v:`元`}
     }
     const _headers = ['产品名称','颜色','价格','数量']
@@ -118,7 +119,7 @@ const OrderDetail = ({isShow,orderId,handleCancel})=>{
   },[tableData])
 
   const callbackHandler = useCallback((pageData) => {
-    return (<><tr><th><Button onClick={submit}>
+    return (<><tr><th><Button className={styles.s_button} onClick={submit}>
       导出EXCEL
     </Button></th></tr></>)
   }, [tableData]);
