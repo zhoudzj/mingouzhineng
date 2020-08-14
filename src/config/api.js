@@ -67,6 +67,12 @@ export const removeOrder = (param) => {
 //生成pdf
 export const createPdf = (param) => {
     const url = '/order/createPdf';
-    return axios.post(url,param)
+    return axios.get(url,{
+        params:param,
+        responseType: 'arraybuffer',
+        headers:{
+            'Accept':'application/pdf'
+        }
+    })
 }
 

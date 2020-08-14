@@ -87,7 +87,6 @@ const My = ({userInfo}) => {
     useEffect(() => {
     const fetchData = async () => {
       const rawData = await getOrderList();
-      console.log(rawData);
       setTableData(rawData);
     }
     fetchData();

@@ -236,7 +236,12 @@ const OrderDetail = ({roomData}) => {
   }
 
   const getPdf = async() => {
-    await createPdf({url:window.location.href})
+    const blob = await createPdf({url:window.location.href});
+    console.log(blob);
+    const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = 'test.pdf'
+        link.click()
   }
   useEffect(() => {
     let totalPrice = 0;

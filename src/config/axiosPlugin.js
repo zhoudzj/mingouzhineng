@@ -22,8 +22,12 @@ instance.interceptors.request.use(config => {
 })
 
 instance.interceptors.response.use(res => {
+                        console.log(res);
+
     if (res.status === 200) {
+
         if (res.data.code === 200) {
+            
             return Promise.resolve(res.data.data);
         } else if(res.data.code === 1301){
             tip(res.data.message);
@@ -32,8 +36,9 @@ instance.interceptors.response.use(res => {
             tip(res.data.message);
             localStorage.removeItem("token");
             toLogin();
-        } else{
-            tip(res.data.message);
+        } else if(res.data){
+            return Promise.resolve(new Blob([res.data], { type: 'application/pdf'}));
+        }else {
             return Promise.reject(res.data.message);
         }
     } else {
@@ -68,6 +73,7 @@ instance.interceptors.response.use(res => {
  * 禁止点击蒙层、显示一秒后关闭
  */
 const tip = (msg) => {
+    console.log(msg);
     message.error({
         content: msg,
         duration: 2,
