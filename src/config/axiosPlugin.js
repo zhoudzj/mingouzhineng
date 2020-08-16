@@ -22,12 +22,8 @@ instance.interceptors.request.use(config => {
 })
 
 instance.interceptors.response.use(res => {
-                        console.log(res);
-
     if (res.status === 200) {
-
         if (res.data.code === 200) {
-            
             return Promise.resolve(res.data.data);
         } else if(res.data.code === 1301){
             tip(res.data.message);
@@ -37,6 +33,7 @@ instance.interceptors.response.use(res => {
             localStorage.removeItem("token");
             toLogin();
         } else if(res.data){
+            console.log(res);
             return Promise.resolve(new Blob([res.data], { type: 'application/pdf'}));
         }else {
             return Promise.reject(res.data.message);

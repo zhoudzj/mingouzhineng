@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer, memo, useMemo,useCallback} from 'react';
+import React, {useState, useEffect, useReducer, memo, useMemo,useCallback,forwardRef,useRef} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
 import styles from "./detail.scss";
 import {
@@ -11,10 +11,12 @@ import {
   message,
   Space
 } from 'antd';
-import {getOrderListDetail} from '@/config/api';
+import {getOrderListDetail,createPdf} from '@/config/api';
 import xlsx from 'xlsx';
+import html2canvas from 'html2canvas'
+import jsPdf from 'jspdf'
 
-const OrderDetail = ({isShow,orderItem,handleCancel})=>{
+const MyDetail = ({isShow,orderItem,handleCancel})=>{
 
   const [tableData,
     setTableData] = useState([]);
@@ -64,8 +66,34 @@ const OrderDetail = ({isShow,orderItem,handleCancel})=>{
       dataIndex: 'unit'
     }
   ],[])
+
+  // const getPdf = async() => {
+  //   const blob = await createPdf({url:window.location.href});
+  //   console.log(blob);
+  //   const url = window.URL.createObjectURL(blob);
+  //   console.log(url);
+  //   window.open(url);
+  //   window.URL.revokeObjectURL(url);
+  // }
+  const getPdf = () => {
+    const domElement = document.getElementById('tab');
+    html2canvas(domElement).then((canvas)=>{
+        let contentWidth = canvas.width;
+        let contentHeight = canvas.height;
+
+        const img = canvas.toDataURL('image/jpeg');
+        
+        var imgWidth = 595.28;
+        var imgHeight = 592.28/contentWidth * contentHeight;
+        const pdf = new jsPdf('', 'pt', 'a4');
+        pdf.addImage(img, 'JPEG', 0, 0, imgWidth, imgHeight)
+        pdf.save(`${orderItem.project_name}${orderItem.house_num}.pdf`)
+    })
+  }
+
   
   useEffect(() => {
+
     const fetchData = async () => {
       const rawData = await getOrderListDetail({orderId:String(orderItem.id)});
       console.log(rawData);
@@ -119,9 +147,7 @@ const OrderDetail = ({isShow,orderItem,handleCancel})=>{
   },[tableData])
 
   const callbackHandler = useCallback((pageData) => {
-    return (<><tr><th><Button className={styles.s_button} onClick={submit}>
-      导出EXCEL
-    </Button></th></tr></>)
+    return (<><tr><td><Button onClick={getPdf}>导出pdf</Button></td></tr></>)
   }, [tableData]);
   return (
     <Modal width={1000}
@@ -129,9 +155,9 @@ const OrderDetail = ({isShow,orderItem,handleCancel})=>{
           visible={isShow}
           onCancel={handleCancel}
           footer={null}>
-      <Table columns={columns} dataSource={tableData} rowKey='id' summary={callbackHandler}/>
+      <Table id="tab" size="small" columns={columns} dataSource={tableData} rowKey='id' summary={callbackHandler} pagination={false}/>
     </Modal>
   )
-}
+};
 
-export default OrderDetail
+export default MyDetail

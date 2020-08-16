@@ -21,3 +21,11 @@
   padding: 16px 24px;
   float: right
 }
+
+:global {
+  #previewModal{
+    .ant-form-item-label{
+      text-align: left
+    }
+  }
+}

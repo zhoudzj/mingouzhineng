@@ -5,7 +5,7 @@ import React, {
   useContext,
   memo,
   useCallback,
-  useMemo
+  useMemo,
 } from 'react';
 import {
   Switch,
@@ -24,15 +24,19 @@ import {
   Form,
   Pagination,
   Input,
-  message
+  message,
+  Row,
+  Col
 } from 'antd';
 import HouseHeader from "@/components/HouseHeader";
-import styles from "./index.css";
+import styles from "./index.scss";
 import DeviceDetail from "@pages/DeviceDetail/";
-import {getProductList, getDefaultProductList, createOrder,createPdf} from '@/config/api';
+import {getProductList, getDefaultProductList, createOrder} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg';
 import {Context} from '@/context-manager';
 import xlsx from 'xlsx';
+import html2canvas from 'html2canvas'
+import jsPdf from 'jspdf'
 
 const MemoTable = memo(Table);
 const MemoForm = memo(Form);
@@ -69,11 +73,11 @@ const reducer = (state, action) => {
 
 const layout = {
   labelCol: {
-    offset: 5,
-    span: 4
+    offset: 1,
+    span: 3
   },
   wrapperCol: {
-    span: 10
+    span: 6
   }
 }
 
@@ -195,54 +199,94 @@ const OrderDetail = ({roomData}) => {
   };
   //生成excel
   const submit = () => {
-    const formData = form.getFieldsValue(['comunityName','style','room','salesman','name']);
+    const formData = form.getFieldsValue(['comunityName', 'style', 'room', 'salesman', 'name']);
     let arr = previewList.map((item, index) => {
       return {
-          '产品名称': item.name,
-          '颜色': getColor(item.color),
-          '价格': item.price,
-          '数量': item.number
-        }
+        '产品名称': item.name,
+        '颜色': getColor(item.color),
+        '价格': item.price,
+        '数量': item.number
+      }
     });
-    // let sheet = xlsx
-    //     .utils
-    //     .json_to_sheet(arr);
+    // let sheet = xlsx     .utils     .json_to_sheet(arr);
     const topHeader = {
-      A1:{t:'s',v:'项目名称'},
-      B1:{t:'s',v:formData.comunityName},
-      A2:{t:'s',v:`销售姓名:${formData.salesman}`},
-      B2:{t:'s',v:`姓名:${formData.name}`},
-      C2:{t:'s',v:`房号:${formData.room}`},
-      D2:{t:'s',v:`户型:${formData.style}`},
-      A3:{t:'s',v:'总价'},
-      B3:{t:'s',v:`${totalPrice}元`}
+      A1: {
+        t: 's',
+        v: '项目名称'
+      },
+      B1: {
+        t: 's',
+        v: formData.comunityName
+      },
+      A2: {
+        t: 's',
+        v: `销售姓名:${formData.salesman}`
+      },
+      B2: {
+        t: 's',
+        v: `姓名:${formData.name}`
+      },
+      C2: {
+        t: 's',
+        v: `房号:${formData.room}`
+      },
+      D2: {
+        t: 's',
+        v: `户型:${formData.style}`
+      },
+      A3: {
+        t: 's',
+        v: '总价'
+      },
+      B3: {
+        t: 's',
+        v: `${totalPrice}元`
+      }
     }
-    const _headers = ['产品名称','颜色','价格','数量']
-    let headers = _headers.map((v,i)=>Object.assign({},{v:v,t:'s',position:String.fromCharCode(65+i)+4})).reduce((prev,next) => Object.assign({},prev,{[next.position]:{v:next.v,t:next.t}}),{});
-    let data = arr.map((v,i)=>_headers.map((k,j)=>{ let type = '';if(k==='产品名称'||k==='颜色'){type='s'}else{type='n'}  return Object.assign({},{v:v[k],t:type,position:String.fromCharCode(65+j)+(i+5)}) })).reduce((prev,next)=>prev.concat(next)).reduce((prev,next)=>Object.assign({},prev,{[next.position]:{v:next.v,t:next.t}}),{});
-    let output = Object.assign({},topHeader,headers,data);
+    const _headers = ['产品名称', '颜色', '价格', '数量']
+    let headers = _headers.map((v, i) => Object.assign({}, {
+      v: v,
+      t: 's',
+      position: String.fromCharCode(65 + i) + 4
+    })).reduce((prev, next) => Object.assign({}, prev, {
+      [next.position]: {
+        v: next.v,
+        t: next.t
+      }
+    }), {});
+    let data = arr.map((v, i) => _headers.map((k, j) => {
+      let type = '';
+      if (k === '产品名称' || k === '颜色') {
+        type = 's'
+      } else {
+        type = 'n'
+      }
+      return Object.assign({}, {
+        v: v[k],
+        t: type,
+        position: String.fromCharCode(65 + j) + (i + 5)
+      })
+    })).reduce((prev, next) => prev.concat(next)).reduce((prev, next) => Object.assign({}, prev, {
+      [next.position]: {
+        v: next.v,
+        t: next.t
+      }
+    }), {});
+    let output = Object.assign({}, topHeader, headers, data);
 
     let outputPos = Object.keys(output);
-    let ref = outputPos[0]+':'+outputPos[outputPos.length-1];
+    let ref = outputPos[0] + ':' + outputPos[outputPos.length - 1];
 
     let book = xlsx
-        .utils
-        .book_new();
+      .utils
+      .book_new();
 
     xlsx
       .utils
-      .book_append_sheet(book, Object.assign({},output,{'!ref':ref}), "sheet1");
+      .book_append_sheet(book, Object.assign({}, output, {'!ref': ref}), "sheet1");
     xlsx.writeFile(book, `user${new Date().getTime()}.xls`);
   }
 
-  const getPdf = async() => {
-    const blob = await createPdf({url:window.location.href});
-    console.log(blob);
-    const link = document.createElement('a')
-        link.href = window.URL.createObjectURL(blob)
-        link.download = 'test.pdf'
-        link.click()
-  }
   useEffect(() => {
     let totalPrice = 0;
     previewList.forEach(({price, number}) => {
@@ -376,8 +420,28 @@ const OrderDetail = ({roomData}) => {
   const callbackHandler = useCallback((pageData) => {
     return (<><tr><th></th><td></td><td></td><td><Button onClick={preView}>
       订单预览
-    </Button></td></tr></>)
+    </Button> </td></tr></>)
   }, [tableData]);
+
+  const getPdf = () => {
+    const formData = form.getFieldsValue(['comunityName', 'style', 'room', 'salesman', 'name']);
+
+    const domElement = document.getElementsByClassName('ant-modal-body');
+    console.log(domElement);
+    html2canvas(domElement[0]).then((canvas) => {
+      let contentWidth = canvas.width;
+      let contentHeight = canvas.height;
+
+      const img = canvas.toDataURL('image/jpeg');
+
+      var imgWidth = 595.28;
+      var imgHeight = 592.28 / contentWidth * contentHeight;
+      const pdf = new jsPdf('', 'pt', 'a4');
+
+      pdf.addImage(img, 'JPEG', 0, 0, imgWidth, imgHeight)
+      pdf.save(`${formData.comunityName}${formData.room}.pdf`)
+    })
+  }
 
   useEffect(() => {
     const handdleRawItem = (typeId, rawData, item) => {
@@ -430,82 +494,75 @@ const OrderDetail = ({roomData}) => {
           title="订单预览"
           visible={visible}
           onCancel={handleCancel}
-          footer={current === 2
-          ? (
-            <div>
-              <Button onClick={getPdf}>导出pdf</Button>
-              <Button onClick={submit}>导出EXCEL</Button>
-              <Button key='submit' type="primary" onClick={handleOk}>提交订单</Button>
-            </div>
-          )
-          : null}>
-          {current === 1
-            ? <List
-                size="large"
-                dataSource={previewList}
-                renderItem={item => <List.Item key={item.id}>
-                <div className={styles.g_item_name}>{item.name}</div>
-                <div className={styles.g_item_item}>{getColor(item.color)}</div>
-                <div className={styles.g_item_item}>{`￥${item.price}`}</div>
-                <div className={styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
-              </List.Item>}
-                footer={< div className = {
-                styles.g_totalprice
-              } > 总价 : {
-                `￥${totalPrice}`
-              } < /div>}/>
-            : null}
-          <div>{current === 2
-              ? (
-                <MemoForm
-                  {...layout}
-                  name="prodForm"
-                  form={form}
-                  initialValues={initFormValue}
-                  onFinish={onFinish}>
-                  <Form.Item label="项目名称" name="comunityName">
-                    <Input/>
-                  </Form.Item>
-                  <Form.Item label="户型" name="style">
-                    <Input/>
-                  </Form.Item>
-                  <Form.Item label="房号" name="room">
-                    <Input/>
-                  </Form.Item>
-                  <Form.Item
-                    label="销售姓名"
-                    name="salesman"
-                    rules={[{
-                      required: true,
-                      message: '销售姓名不能为空'
-                    }
-                  ]}>
-                    <Input/>
-                  </Form.Item>
-                  <Form.Item
-                    label="姓名"
-                    name="name"
-                    rules={[{
-                      required: true,
-                      message: '姓名不能为空'
-                    }
-                  ]}>
-                    <Input/>
-                  </Form.Item>
-                </MemoForm>
-              )
-              : null}
-          </div>
-          <Pagination
-            simple
-            defaultCurrent={1}
-            defaultPageSize={1}
-            onChange={onPageChange}
-            total={2}/>
+          footer={<div><Button onClick={getPdf}>pdf预览</Button> <Button key = 'submit' type = "primary" onClick = {
+          handleOk
+        }> 提交订单</Button></div >}>
+          <MemoForm
+            id="previewModal"
+            name="prodForm"
+            form={form}
+            initialValues={initFormValue}
+            onFinish={onFinish}>
+            <Row gutter={24}>
+              <Col span={8}>
+                <Form.Item label="项目名称" name="comunityName">
+                  <Input/>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="户型" name="style">
+                  <Input/>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="房号" name="room">
+                  <Input/>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="销售姓名"
+                  name="salesman"
+                  rules={[{
+                    required: true,
+                    message: '销售姓名不能为空'
+                  }
+                ]}>
+                  <Input/>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="姓名"
+                  name="name"
+                  rules={[{
+                    required: true,
+                    message: '姓名不能为空'
+                  }
+                ]}>
+                  <Input/>
+                </Form.Item>
+              </Col>
+            </Row>
+          </MemoForm>
+          <List
+            size="small"
+            dataSource={previewList}
+            renderItem={item => <List.Item key={item.id}>
+            <div className={styles.g_item_name}>{item.name}</div>
+            <div className={styles.g_item_item}>{getColor(item.color)}</div>
+            <div className={styles.g_item_item}>{`￥${item.price}`}</div>
+            <div className={styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
+          </List.Item>}
+            footer={< div className = {
+            styles.g_totalprice
+          } > 总价 : {
+            `￥${totalPrice}`
+          } </div>}/>
         </Modal>
       </Route>
     </Switch>
   )
-}
+};
 
 export default OrderDetail

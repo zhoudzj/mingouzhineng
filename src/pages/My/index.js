@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer, memo, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useReducer, memo, useMemo, useCallback,useRef} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
 import styles from "./index.scss";
 import Header from '@/components/Header';
@@ -12,13 +12,14 @@ import {
   message,
   Space
 } from 'antd';
-import {getOrderList,getOrderListDetail,removeOrder} from '@/config/api';
+import {getOrderList,getOrderListDetail,removeOrder,createPdf} from '@/config/api';
 import {connect} from 'react-redux';
-import OrderDetail from './detail';
+import MyDetail from './detail';
 
 const MemoTable = memo(Table);
-const MemoOrderDetail = memo(OrderDetail);
+const MemoMyDetail= memo(MyDetail);
 const My = ({userInfo}) => {
+
   const [tableData,
     setTableData] = useState([]);
   const [isShow,setIsShow] = useState(false);
@@ -101,7 +102,7 @@ const My = ({userInfo}) => {
           dataSource={tableData}
           rowKey='id'
           {...state}/>
-       <MemoOrderDetail isShow={isShow} orderItem={orderItem} handleCancel={handleCancel}/>   
+       <MemoMyDetail isShow={isShow} orderItem={orderItem} handleCancel={handleCancel} />   
     </div>
   )
 }
