@@ -35,7 +35,7 @@ import {getProductList, getDefaultProductList, createOrder} from '@/config/api';
 import errorImg from '@/assets/img/inner.jpg';
 import {Context} from '@/context-manager';
 import xlsx from 'xlsx';
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas';
 import jsPdf from 'jspdf'
 
 const MemoTable = memo(Table);
@@ -121,7 +121,7 @@ const OrderDetail = ({roomData}) => {
     const newlist = previewList.map(item => {
       const filterObj = {}
       for (let key in item) {
-        if (['id', 'number'].includes(key)) {
+        if (['id', 'number','color'].includes(key)) {
           filterObj[key] = item[key];
         }
       }
@@ -494,7 +494,7 @@ const OrderDetail = ({roomData}) => {
           title="订单预览"
           visible={visible}
           onCancel={handleCancel}
-          footer={<div><Button onClick={getPdf}>pdf预览</Button> <Button key = 'submit' type = "primary" onClick = {
+          footer={<div><Button onClick={getPdf}>导出pdf</Button> <Button key = 'submit' type = "primary" onClick = {
           handleOk
         }> 提交订单</Button></div >}>
           <MemoForm

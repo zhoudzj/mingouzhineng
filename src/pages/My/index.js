@@ -12,9 +12,10 @@ import {
   message,
   Space
 } from 'antd';
-import {getOrderList,getOrderListDetail,removeOrder,createPdf} from '@/config/api';
+import {getOrderList,getOrderListDetail,removeOrder} from '@/config/api';
 import {connect} from 'react-redux';
 import MyDetail from './detail';
+import moment from 'moment';
 
 const MemoTable = memo(Table);
 const MemoMyDetail= memo(MyDetail);
@@ -71,6 +72,7 @@ const My = ({userInfo}) => {
     },{
       title: '创建时间',
       dataIndex: 'create_time',
+      render: (text) => (moment(text).format('YYYY-MM-DD HH:mm:ss'))
     },
     {
       title: '操作',
@@ -106,7 +108,6 @@ const My = ({userInfo}) => {
     </div>
   )
 }
-
 
 const mapStateToProps = (state) => {
   return {

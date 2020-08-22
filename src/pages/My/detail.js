@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import {getOrderListDetail,createPdf} from '@/config/api';
 import xlsx from 'xlsx';
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas';
 import jsPdf from 'jspdf'
 
 const MyDetail = ({isShow,orderItem,handleCancel})=>{
@@ -49,7 +49,7 @@ const MyDetail = ({isShow,orderItem,handleCancel})=>{
     },
     {
       title:'颜色',
-      dataIndex:'color',
+      dataIndex:'itemColor',
       render: (value, row, index) => {
         return (<span>{getColor(value)}</span>)
       }
@@ -68,14 +68,14 @@ const MyDetail = ({isShow,orderItem,handleCancel})=>{
     }
   ],[])
 
-  // const getPdf = async() => {
-  //   const blob = await createPdf({url:window.location.href});
-  //   console.log(blob);
-  //   const url = window.URL.createObjectURL(blob);
-  //   console.log(url);
-  //   window.open(url);
-  //   window.URL.revokeObjectURL(url);
-  // }
+  const fetchPdf = async() => {
+    const blob = await createPdf({url:window.location.href});
+    console.log(blob);
+    const url = window.URL.createObjectURL(blob);
+    console.log(url);
+    window.open(url);
+    window.URL.revokeObjectURL(url);
+  }
   const getPdf = () => {
     const domElement = document.getElementsByClassName('ant-modal-body');
     html2canvas(domElement[0]).then((canvas)=>{
@@ -118,7 +118,7 @@ const MyDetail = ({isShow,orderItem,handleCancel})=>{
           title="订单详情"
           visible={isShow}
           onCancel={handleCancel}
-          footer={<Button type="primary" onClick={getPdf}>导出pdf</Button>}>
+          footer={<><Button type="primary" onClick={getPdf}>导出pdf</Button></>}>
         <Descriptions>
           <Descriptions.Item label="项目名称">{orderItem.project_name}</Descriptions.Item>
           <Descriptions.Item label="房号">{orderItem.house_num}</Descriptions.Item>
