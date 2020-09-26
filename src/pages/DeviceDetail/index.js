@@ -11,7 +11,12 @@ const { Option } = Select;
 
 const PRODUCT_PANEL_TYPEID = 4;
 const PRODUCT_SOCKET_TYPEID = 5;
-
+const GROUP_IDS = {
+  FIRST:1,
+  SECOND:2,
+  THIRD:3,
+  FOUR:4
+}
 const DeviceDetail = ({changeTableData}) => {
     const match = useRouteMatch();
     const history = useHistory();
@@ -42,12 +47,14 @@ const DeviceDetail = ({changeTableData}) => {
               })
       };
       pannelArr.forEach(item => {
-        if(item.groupId===1&&item.childId===1){
-             handdleRawItem(1,pannelArr,item);
-        }else if(item.groupId===2&&item.childId===1){
-             handdleRawItem(2,pannelArr,item);
-        }else if(item.groupId===3&&item.childId===1){
-             handdleRawItem(3,pannelArr,item);
+        if(item.groupId===GROUP_IDS.FIRST&&item.childId===1){
+             handdleRawItem(GROUP_IDS.FIRST,pannelArr,item);
+        }else if(item.groupId===GROUP_IDS.SECOND&&item.childId===1){
+             handdleRawItem(GROUP_IDS.SECOND,pannelArr,item);
+        }else if(item.groupId===GROUP_IDS.THIRD&&item.childId===1){
+             handdleRawItem(GROUP_IDS.THIRD,pannelArr,item);
+        }else if(item.groupId===GROUP_IDS.FOUR&&item.childId===1){
+             handdleRawItem(GROUP_IDS.FOUR,pannelArr,item);
         }
       })
       setTableData(pannelArr);
