@@ -77,7 +77,7 @@ const DeviceDetail = ({changeTableData}) => {
     },
     renderCell: (checked, record, index, originNode) => {
       console.log(record)
-      if (index % 2 === 0) {
+      if (record.childId === 1) {
         return originNode
       }else {
         const obj = {props:{}};
