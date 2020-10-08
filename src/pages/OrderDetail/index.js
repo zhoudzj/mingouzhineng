@@ -5,7 +5,7 @@ import React, {
   useContext,
   memo,
   useCallback,
-  useMemo,
+  useMemo
 } from 'react';
 import {
   Switch,
@@ -121,7 +121,7 @@ const OrderDetail = ({roomData}) => {
     const newlist = previewList.map(item => {
       const filterObj = {}
       for (let key in item) {
-        if (['id', 'number','color'].includes(key)) {
+        if (['id', 'number', 'color'].includes(key)) {
           filterObj[key] = item[key];
         }
       }
@@ -159,24 +159,28 @@ const OrderDetail = ({roomData}) => {
       rawData.splice(findedAssoIndex, socketArr.length, ...associationData);
     }
     const selectedArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
-    optionalData[0].totalNumber = 0;
-    optionalData[0].totalPrice = 0;
-    optionalData.forEach(i => {
-      selectedArr.forEach(elem => {
-        if (i.childId === elem.childId) {
-          i.number = elem.number
-        }
-      })
 
-      if (!isNaN(i.number) && !isNaN(i.price)) {
-        optionalData[0].totalNumber += i.number;
-        optionalData[0].totalPrice += i.number * Number(i.price);
+   const newArr = selectedArr.map((elem,index) => {
+      //计算总价和总数量
+      const res = optionalData.find(item=>item.childId===elem.childId);
+      if(index===0){
+        res.totalNumber = 0;
+        res.totalPrice = 0;
       }
+      res.number = elem.number;
+       return res;
     });
-
-    const findedIndex = rawData.findIndex(e => optionalData[0].typeId === e.typeId);
-    rawData.splice(findedIndex, selectedArr.length, ...optionalData);
-
+    newArr[0].length = newArr.length;
+    newArr.forEach(item=>{
+      if (!isNaN(item.number) && !isNaN(item.price)){
+      newArr[0].totalNumber += item.number;
+      newArr[0].totalPrice += item.number * Number(item.price);
+      }
+    })
+    // console.log(newArr);
+    const findedIndex = rawData.findIndex(e => newArr[0].typeId === e.typeId);
+    rawData.splice(findedIndex, newArr.length, ...newArr);
+    console.log(rawData);
     setTableData(rawData)
   };
 
@@ -313,7 +317,6 @@ const OrderDetail = ({roomData}) => {
       // textWrap: 'word-break',
       ellipsis: true,
       render: (value, row, index) => {
-        console.log(value);
         const obj = {
           children: value,
           props: {}
@@ -418,9 +421,9 @@ const OrderDetail = ({roomData}) => {
   ], []);
 
   const callbackHandler = useCallback((pageData) => {
-    return (<><tr><th></th><td></td><td></td><td><Button onClick={preView}>
+    return ( <>< tr > <th></th> < td > </td> < td > </td> < td > <Button onClick={preView}>
       订单预览
-    </Button> </td></tr></>)
+    </Button> < /td></tr > </>)
   }, [tableData]);
 
   const getPdf = () => {
@@ -494,9 +497,9 @@ const OrderDetail = ({roomData}) => {
           title="订单预览"
           visible={visible}
           onCancel={handleCancel}
-          footer={<div><Button onClick={getPdf}>导出pdf</Button> <Button key = 'submit' type = "primary" onClick = {
+          footer={< div > <Button onClick={getPdf}>导出pdf</Button> < Button key = 'submit' type = "primary" onClick = {
           handleOk
-        }> 提交订单</Button></div >}>
+        } > 提交订单 < /Button></div >}>
           <MemoForm
             id="previewModal"
             name="prodForm"
@@ -558,7 +561,7 @@ const OrderDetail = ({roomData}) => {
             styles.g_totalprice
           } > 总价 : {
             `￥${totalPrice}`
-          } </div>}/>
+          } < /div>}/>
         </Modal>
       </Route>
     </Switch>

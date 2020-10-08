@@ -40,11 +40,7 @@ const DeviceDetail = ({changeTableData}) => {
       const socketArr = rawData.filter(i=>i.typeId===PRODUCT_SOCKET_TYPEID);
       const handdleRawItem = (groupId,pannelArr,item)=>{
             const arr =  pannelArr.filter(value=>value.groupId===groupId);
-            item.totalPrice = 0;
              item.length = arr.length;
-             arr.forEach(elem => {
-                item.totalPrice += Number(elem.price);
-              })
       };
       pannelArr.forEach(item => {
         if(item.groupId===GROUP_IDS.FIRST&&item.childId===1){
@@ -53,8 +49,6 @@ const DeviceDetail = ({changeTableData}) => {
              handdleRawItem(GROUP_IDS.SECOND,pannelArr,item);
         }else if(item.groupId===GROUP_IDS.THIRD&&item.childId===1){
              handdleRawItem(GROUP_IDS.THIRD,pannelArr,item);
-        }else if(item.groupId===GROUP_IDS.FOUR&&item.childId===1){
-             handdleRawItem(GROUP_IDS.FOUR,pannelArr,item);
         }
       })
       setTableData(pannelArr);
@@ -78,13 +72,12 @@ const DeviceDetail = ({changeTableData}) => {
       const groupId = selectedRows[0].groupId;
       const selectedData = tableData.filter((item)=>item.groupId === groupId);
       const selectedSockets = socketData.filter(item=>item.groupId === groupId);
-      console.log(selectedSockets);
+      console.log(selectedData);
       setSelectedData(selectedData);
       setSelectedSockets(selectedSockets);
     },
     renderCell: (checked, record, index, originNode) => {
-      console.log(record)
-      if (record.childId === 1) {
+      if (record.childId === 1&&record.groupId!==GROUP_IDS.FOUR) {
         return originNode
       }else {
         const obj = {props:{}};
@@ -174,24 +167,6 @@ const DeviceDetail = ({changeTableData}) => {
             <Option value={2}>香槟金</Option>
             <Option value={3}>云母黑</Option>
           </Select>,
-          props: {}
-        };
-        if('length'in row) {
-          obj.props.rowSpan = row.length;
-          return obj;
-        } else {
-          obj.props.rowSpan = 0;
-          return obj
-        }
-      }
-    },{
-      title: '单价',
-      dataIndex: 'price',
-      width:'200px',
-      ellipsis: true,
-      render: (text, row, index) => {
-        const obj = {
-          children: <span>{`￥${row.totalPrice}`}</span>,
           props: {}
         };
         if('length'in row) {
