@@ -104,6 +104,9 @@ const OrderDetail = ({roomData}) => {
     setPreviewList] = useState([]);
   const [totalPrice,
     setTotalPrice] = useState(0);
+  const [deviceTotalPrice,setDeviceTotalPrice] = useState(0);
+  const [taxes,setTaxes] = useState(0);
+  const [installationPrice,setInstallationPrice] = useState(0);
   const [visible,
     setVisible] = useState(false);
   const [current,
@@ -292,13 +295,18 @@ const OrderDetail = ({roomData}) => {
   }
 
   useEffect(() => {
-    let totalPrice = 0;
+    let deviceTotalPrice = 0;
     previewList.forEach(({price, number}) => {
       if (price && number) 
-        totalPrice += (Number(price) * number);
+        deviceTotalPrice += (Number(price) * number);
       }
     );
-    setTotalPrice(totalPrice)
+    setDeviceTotalPrice(deviceTotalPrice);
+    const installationPrice = Math.round(deviceTotalPrice * 0.15);
+    setInstallationPrice(installationPrice);
+    const taxes = Math.round((deviceTotalPrice + deviceTotalPrice*0.15)*0.10);
+    setTaxes(taxes);
+    setTotalPrice(deviceTotalPrice+installationPrice+taxes);
   }, [previewList])
 
   const handleOk = useCallback(e => {
@@ -557,11 +565,12 @@ const OrderDetail = ({roomData}) => {
             <div className={styles.g_item_item}>{`￥${item.price}`}</div>
             <div className={styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
           </List.Item>}
-            footer={< div className = {
-            styles.g_totalprice
-          } > 总价 : {
+            footer={<div>< div className = {
+            styles.g_devicePrice
+          } >设备小计:{`￥${deviceTotalPrice}`}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装调试费:{`￥${installationPrice}`}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;税金:{`￥${taxes}`} </div><div  className = {styles.g_totalprice}
+>总价: {
             `￥${totalPrice}`
-          } < /div>}/>
+          }</div></div>}/>
         </Modal>
       </Route>
     </Switch>

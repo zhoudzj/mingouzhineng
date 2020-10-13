@@ -16,10 +16,14 @@
   width: 60px
 }
 
+.g_devicePrice {
+  color:gray;
+  padding: 16px 10px 0;
+}
+
 .g_totalprice {
   color:red;
-  padding: 16px 24px;
-  float: right
+  padding: 16px 10px 0;
 }
 
 :global {
