@@ -32,9 +32,9 @@ const DeviceDetail = ({changeTableData}) => {
   useEffect(() => {
     const fetchData = async() => {
         const typeIds = [Number(typeId)]
-        if(styleId.charAt(styleId.length-1)==='1'){
-          typeIds.push(PRODUCT_SOCKET_TYPEID);
-        }
+        console.log(styleId);
+        typeIds.push(PRODUCT_SOCKET_TYPEID);
+        
       const rawData = await getProductByType({typeIds});
       const pannelArr = rawData.filter(i=>i.typeId===PRODUCT_PANEL_TYPEID);  
       const socketArr = rawData.filter(i=>i.typeId===PRODUCT_SOCKET_TYPEID);
@@ -72,7 +72,6 @@ const DeviceDetail = ({changeTableData}) => {
       const groupId = selectedRows[0].groupId;
       const selectedData = tableData.filter((item)=>item.groupId === groupId);
       const selectedSockets = socketData.filter(item=>item.groupId === groupId);
-      console.log(selectedData);
       setSelectedData(selectedData);
       setSelectedSockets(selectedSockets);
     },
@@ -109,6 +108,7 @@ const DeviceDetail = ({changeTableData}) => {
     })
       return
     }
+    console.log(selectedSockets);
     changeTableData(selectedData,selectedSockets);
     history.goBack();
   }

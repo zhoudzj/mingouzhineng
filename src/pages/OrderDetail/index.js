@@ -140,49 +140,59 @@ const OrderDetail = ({roomData}) => {
     }
   }, [previewList]);
 
-  const changeTableData = (optionalData, associationData) => {
+  const changeTableData = (optionalData, associationData) => {    
     const rawData = tableData;
+    console.log(associationData);
+
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);
+
       associationData[0].totalNumber = 0;
       associationData[0].totalPrice = 0;
       associationData[0].length = associationData.length;
-      associationData.forEach(i => {
+      let newArr = [];
+      associationData.forEach((item,index,arr) => {
         socketArr.forEach(elem => {
-          if (i.childId === elem.childId) {
-            i.number = elem.number
+          if (item.childId === elem.childId) {
+            item.number = elem.number
+            newArr.push(item);
           }
         })
-        if (!isNaN(i.number) && !isNaN(i.price)) {
-          associationData[0].totalNumber += i.number;
-          associationData[0].totalPrice += i.number * Number(i.price);
+      });
+      console.log(newArr);
+          newArr.forEach((item,index,arr)=>{
+            if (!isNaN(item.number) && !isNaN(item.price)) {
+          arr[0].totalNumber += item.number;
+          arr[0].totalPrice += item.number * Number(item.price);
         }
       })
       const findedAssoIndex = rawData.findIndex(e => associationData[0].typeId === e.typeId);
-      rawData.splice(findedAssoIndex, socketArr.length, ...associationData);
+      rawData.splice(findedAssoIndex, socketArr.length, ...newArr);
     }
-    const selectedArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
 
-   const newArr = selectedArr.map((elem,index) => {
-      //计算总价和总数量
-      const res = optionalData.find(item=>item.childId===elem.childId);
-      if(index===0){
-        res.totalNumber = 0;
-        res.totalPrice = 0;
-      }
-      res.number = elem.number;
-       return res;
+    const oldArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
+      optionalData[0].totalNumber = 0;
+      optionalData[0].totalPrice = 0;
+      optionalData[0].length = optionalData.length;
+
+      let newArr = [];
+      optionalData.forEach((item,index,arr) => {
+        oldArr.forEach(elem => {
+          if ((item.childId === elem.childId)) {
+            item.number = elem.number;
+            newArr.push(item);
+          }
+        })    
     });
-    newArr[0].length = newArr.length;
-    newArr.forEach(item=>{
+    newArr.forEach((item,index,arr)=>{
       if (!isNaN(item.number) && !isNaN(item.price)){
-      newArr[0].totalNumber += item.number;
-      newArr[0].totalPrice += item.number * Number(item.price);
-      }
+      arr[0].totalNumber += item.number;
+      arr[0].totalPrice += item.number * Number(item.price);
+    }
     })
-    // console.log(newArr);
+
     const findedIndex = rawData.findIndex(e => newArr[0].typeId === e.typeId);
-    rawData.splice(findedIndex, newArr.length, ...newArr);
+    rawData.splice(findedIndex, oldArr.length, ...newArr);
     console.log(rawData);
     setTableData(rawData)
   };
