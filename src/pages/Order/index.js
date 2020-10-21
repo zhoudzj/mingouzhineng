@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer,memo,useMemo} from 'react';
+import React, {useState, useEffect, useReducer,memo,useMemo,useContext} from 'react';
 import {Switch, Route, Link, useRouteMatch, useHistory} from 'react-router-dom';
 import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 import {Tabs, Radio, Cascader} from 'antd';
@@ -7,6 +7,7 @@ import Combo from "@/components/Combo";
 import OrderDetail from "@/pages/OrderDetail";
 import HouseHeader from "@/components/HouseHeader";
 import {getCombo, getRoomList} from '@/config/api';
+import {Context} from '@/context-manager';
 
 const {TabPane} = Tabs;
 const Order = ({communityId}) => {
@@ -59,7 +60,7 @@ const Order = ({communityId}) => {
   return (
     <CacheSwitch >
       <Route path={`${match.path}/:styleId`}>
-        <OrderDetail roomData={roomData} />
+        <OrderDetail/>
       </Route>
       <CacheRoute path={`${match.path}`} exact>
         <HouseHeader title={"智能选装"}/>
@@ -70,7 +71,7 @@ const Order = ({communityId}) => {
           </div>
           <div className={styles.order_right}>
           <Cascader options={options} onChange={onChange} placeholder="请选择房间"/>
-          <Combo roomData={roomData} />
+            <Combo roomData={roomData} />
           </div>
         </div>
       </CacheRoute>

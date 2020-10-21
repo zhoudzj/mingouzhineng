@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import styles from "@/assets/css/combo.css";
 import {Link, useRouteMatch, useHistory} from 'react-router-dom';
 import errorImg from '@/assets/img/inner.jpg'
 import {getCombo} from '@/config/api';
+import {Context} from '@/context-manager';
 
 const pictureDomian = process.env.REACT_APP_PICTURE_DOMAIN
 const COMBO_DATA = [];
@@ -14,7 +15,7 @@ const Combo = ({roomData}) => {
     setComboData] = useState(COMBO_DATA);
   const [loadImgArr,
     setLoadImgArr] = useState([]);
-   
+  // const comunityName = useContext(Context);
   useEffect(() => {
     const loadImage = (src) => {
       return new Promise(function (resolve, reject) {
@@ -42,24 +43,39 @@ const Combo = ({roomData}) => {
       setComboData(arr);
     }
     if (roomData.length > 0) {
-      fetchData().then(() => {
-      }).catch((e) => {
+      fetchData().then(() => {}).catch((e) => {
         console.log(e);
       });
     }
   }, [roomData])
 
   return (
-    <div className={styles.g_combos}>
-      {comboData.map((item, index) => (
-        <Link to={{pathname:`${match.url}/${String(item.id)}`,state:item.name}} key={index}>
-          <div className={styles.combo_wrap}>
-            <img className={styles.img_wrap} src={item['img'].src}/>
-            <span>{item.name}</span>
-          </div>
-        </Link>
-      ))}
-    </div>
+    <Context.Consumer>
+      {
+        (comunityName)=>(
+          <div className={styles.g_combos}>
+        {comboData.map((item, index) => (
+          <Link
+            to={{
+            pathname: `${match.url}/${String(item.id)}`,
+            state: {
+              comunityName,
+              style: item.name,
+              roomNo: roomData
+            }
+          }}
+            key={index}>
+            <div className={styles.combo_wrap}>
+              <img className={styles.img_wrap} src={item['img'].src}/>
+              <span>{item.name}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+        )
+      }
+    </Context.Consumer>
+
   )
 }
 

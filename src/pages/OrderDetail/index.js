@@ -91,13 +91,15 @@ const getColor = (index) => {
   }
 }
 
-const OrderDetail = ({roomData}) => {
+const OrderDetail = ({}) => {
   const [form] = Form.useForm();
 
-  const comunityName = useContext(Context);
   const match = useRouteMatch();
   const history = useHistory();
   const {state} = useLocation();
+  console.log(state.style);
+    console.log(state.roomNo);
+console.log(state.comunityName);
   const [tableData,
     setTableData] = useState([]);
   const [previewList,
@@ -111,12 +113,11 @@ const OrderDetail = ({roomData}) => {
     setVisible] = useState(false);
   const [current,
     setCurrent] = useState(1);
-  const room = roomData.join('-');
-  initFormValue = comunityName
+  initFormValue = state
     ? {
-      comunityName: comunityName,
-      style: state,
-      room: room
+      comunityName: state.comunityName,
+      style: state.style,
+      room:state.roomNo.join('-')
     }
     : initFormValue;
   //提交订单到服务器
