@@ -32,7 +32,6 @@ const DeviceDetail = ({changeTableData}) => {
   useEffect(() => {
     const fetchData = async() => {
         const typeIds = [Number(typeId)]
-        console.log(styleId);
         typeIds.push(PRODUCT_SOCKET_TYPEID);
         
       const rawData = await getProductByType({typeIds});
@@ -108,7 +107,6 @@ const DeviceDetail = ({changeTableData}) => {
     })
       return
     }
-    console.log(selectedSockets);
     changeTableData(selectedData,selectedSockets);
     history.goBack();
   }

@@ -97,18 +97,18 @@ const OrderDetail = ({}) => {
   const match = useRouteMatch();
   const history = useHistory();
   const {state} = useLocation();
-  console.log(state.style);
-    console.log(state.roomNo);
-console.log(state.comunityName);
   const [tableData,
     setTableData] = useState([]);
   const [previewList,
     setPreviewList] = useState([]);
   const [totalPrice,
     setTotalPrice] = useState(0);
-  const [deviceTotalPrice,setDeviceTotalPrice] = useState(0);
-  const [taxes,setTaxes] = useState(0);
-  const [installationPrice,setInstallationPrice] = useState(0);
+  const [deviceTotalPrice,
+    setDeviceTotalPrice] = useState(0);
+  const [taxes,
+    setTaxes] = useState(0);
+  const [installationPrice,
+    setInstallationPrice] = useState(0);
   const [visible,
     setVisible] = useState(false);
   const [current,
@@ -117,7 +117,9 @@ console.log(state.comunityName);
     ? {
       comunityName: state.comunityName,
       style: state.style,
-      room:state.roomNo.join('-')
+      room: state
+        .roomNo
+        .join('-')
     }
     : initFormValue;
   //提交订单到服务器
@@ -141,18 +143,15 @@ console.log(state.comunityName);
     }
   }, [previewList]);
 
-  const changeTableData = (optionalData, associationData) => {    
+  const changeTableData = (optionalData, associationData) => {
     const rawData = tableData;
     console.log(associationData);
 
     if (associationData.length > 0) {
       const socketArr = rawData.filter(value => value.typeId === associationData[0].typeId);
 
-      associationData[0].totalNumber = 0;
-      associationData[0].totalPrice = 0;
-      associationData[0].length = associationData.length;
       let newArr = [];
-      associationData.forEach((item,index,arr) => {
+      associationData.forEach((item, index, arr) => {
         socketArr.forEach(elem => {
           if (item.childId === elem.childId) {
             item.number = elem.number
@@ -161,8 +160,15 @@ console.log(state.comunityName);
         })
       });
       console.log(newArr);
-          newArr.forEach((item,index,arr)=>{
-            if (!isNaN(item.number) && !isNaN(item.price)) {
+      newArr.forEach((item, index, arr) => {
+        if (index === 0) {
+          arr[index].totalNumber = 0;
+          arr[index].totalPrice = 0;
+          if (item.childId === 11) {
+            arr[index].length = arr.length;
+          }
+        }
+        if (!isNaN(item.number) && !isNaN(item.price)) {
           arr[0].totalNumber += item.number;
           arr[0].totalPrice += item.number * Number(item.price);
         }
@@ -172,24 +178,26 @@ console.log(state.comunityName);
     }
 
     const oldArr = rawData.filter(value => value.typeId === optionalData[0].typeId);
-      optionalData[0].totalNumber = 0;
-      optionalData[0].totalPrice = 0;
-      optionalData[0].length = optionalData.length;
 
-      let newArr = [];
-      optionalData.forEach((item,index,arr) => {
-        oldArr.forEach(elem => {
-          if ((item.childId === elem.childId)) {
-            item.number = elem.number;
-            newArr.push(item);
-          }
-        })    
+    let newArr = [];
+    optionalData.forEach((item, index, arr) => {
+      oldArr.forEach(elem => {
+        if ((item.childId === elem.childId)) {
+          item.number = elem.number;
+          newArr.push(item);
+        }
+      })
     });
-    newArr.forEach((item,index,arr)=>{
-      if (!isNaN(item.number) && !isNaN(item.price)){
-      arr[0].totalNumber += item.number;
-      arr[0].totalPrice += item.number * Number(item.price);
-    }
+    newArr.forEach((item, index, arr) => {
+      if (index === 0) {
+        arr[index].totalNumber = 0;
+        arr[index].totalPrice = 0;
+      }
+      if (!isNaN(item.number) && !isNaN(item.price)) {
+        arr[0].totalNumber += item.number;
+        arr[0].totalPrice += item.number * Number(item.price);
+        arr[0].length = arr.length;
+      }
     })
 
     const findedIndex = rawData.findIndex(e => newArr[0].typeId === e.typeId);
@@ -315,9 +323,9 @@ console.log(state.comunityName);
     setDeviceTotalPrice(deviceTotalPrice);
     const installationPrice = Math.round(deviceTotalPrice * 0.15);
     setInstallationPrice(installationPrice);
-    const taxes = Math.round((deviceTotalPrice + deviceTotalPrice*0.15)*0.10);
+    const taxes = Math.round((deviceTotalPrice + deviceTotalPrice * 0.15) * 0.10);
     setTaxes(taxes);
-    setTotalPrice(deviceTotalPrice+installationPrice+taxes);
+    setTotalPrice(deviceTotalPrice + installationPrice + taxes);
   }, [previewList])
 
   const handleOk = useCallback(e => {
@@ -576,12 +584,27 @@ console.log(state.comunityName);
             <div className={styles.g_item_item}>{`￥${item.price}`}</div>
             <div className={styles.g_item_item}>{`数量${item.number}${item.unit}`}</div>
           </List.Item>}
-            footer={<div>< div className = {
+            footer={< div > < div className = {
             styles.g_devicePrice
-          } >设备小计:{`￥${deviceTotalPrice}`}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装调试费:{`￥${installationPrice}`}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;税金:{`￥${taxes}`} </div><div  className = {styles.g_totalprice}
->总价: {
-            `￥${totalPrice}`
-          }</div></div>}/>
+          } > 设备小计 : {
+            `￥${deviceTotalPrice}`
+          } &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          安装调试费 : {
+            `￥${installationPrice}`
+          } &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          税金 : {
+            `￥${taxes}`
+          } < /div><div className = {styles.g_totalprice} >总价: { `￥${totalPrice}` }</div > </div>}/>
         </Modal>
       </Route>
     </Switch>
